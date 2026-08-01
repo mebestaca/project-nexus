@@ -10,4 +10,5 @@ export interface Game {
     playerX: string;
     playerO: string | null;
     winner: Player | "" | "draw";
+    
 }

@@ -13,7 +13,7 @@ const wins = [
     [2, 4, 6],
 ];
 
-export function checkWinner(board: Board): Player | null {
+export function checkWinner(board: Board): Player | "draw" | null {
     for (const [a, b, c] of wins) {
         if (
             board[a] &&
@@ -24,5 +24,9 @@ export function checkWinner(board: Board): Player | null {
         }
     }
 
+    if (!board.includes("")) {
+        return "draw";
+    }
+    
     return null;
 }
