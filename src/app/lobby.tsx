@@ -1,13 +1,7 @@
 import { View, Text } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
-
-import {
-  doc,
-  onSnapshot
-} from "firebase/firestore";
-
-import { db } from "@/firebase/config";
 import { useEffect } from "react";
+import { subscribeToGame } from "@/services/gameService";
 
 
 export default function LobbyScreen() {
@@ -23,46 +17,49 @@ export default function LobbyScreen() {
     if(!gameId) return;
 
 
-    const gameRef =
-      doc(db,"games",gameId);
-
-
     const unsubscribe =
-      onSnapshot(gameRef,(snapshot)=>{
+      subscribeToGame(
+        gameId,
+        (game) => {
 
-        const game =
-          snapshot.data();
+
+          if (!game) return;
 
 
-        if(
-          game?.playerO
-        ){
+          if (game.playerO) {
 
-          router.replace({
-            pathname:"/game",
-            params:{
-              gameId
-            }
-          });
+            router.replace({
+              pathname: "/game",
+              params:{
+                gameId,
+              },
+            });
+
+          }
+
 
         }
-
-      });
+      );
 
 
     return unsubscribe;
 
 
-  },[gameId]);
+  }, [gameId]);
 
 
 
-  return(
+  return (
 
     <View>
 
       <Text>
         Waiting for another player...
+      </Text>
+
+
+      <Text>
+        Game ID: {gameId}
       </Text>
 
     </View>
