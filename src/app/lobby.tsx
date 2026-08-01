@@ -29,7 +29,7 @@ export default function LobbyScreen() {
           if (game.playerO) {
 
             router.replace({
-              pathname: "/game",
+              pathname: "/tictactoe",
               params:{
                 gameId,
               },

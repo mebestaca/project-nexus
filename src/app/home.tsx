@@ -24,7 +24,7 @@ export default function HomeScreen() {
 
 
     router.push({
-      pathname: "/game",
+      pathname: "/tictactoe",
       params: {
         gameId,
       },
