@@ -1,14 +1,14 @@
 import { Picker } from "@react-native-picker/picker";
 import { Formik, FormikHelpers } from "formik";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import * as Yup from "yup";
 
@@ -50,7 +50,7 @@ export default function CreateGameScreen() {
     { setSubmitting }: FormikHelpers<CreateGameValues>,
   ) => {
     console.log("Hosting game:", values);
-    // TODO: call API to create the game / navigate to lobby
+
     setSubmitting(false);
   };
 

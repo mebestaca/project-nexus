@@ -1,12 +1,12 @@
 import { router } from "expo-router";
 import React from "react";
 import {
-    FlatList,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 interface Game {
@@ -18,15 +18,15 @@ interface Game {
 }
 
 const MOCK_GAMES: Game[] = [
-  {
-    id: "1",
-    name: "Friday Night Trivia",
-    host: "Alex",
-    players: 3,
-    maxPlayers: 8,
-  },
-  { id: "2", name: "Word Blitz", host: "Jamie", players: 5, maxPlayers: 6 },
-  { id: "3", name: "Charades Chaos", host: "Sam", players: 2, maxPlayers: 10 },
+  // {
+  //   id: "1",
+  //   name: "Friday Night Trivia",
+  //   host: "Alex",
+  //   players: 3,
+  //   maxPlayers: 8,
+  // },
+  // { id: "2", name: "Word Blitz", host: "Jamie", players: 5, maxPlayers: 6 },
+  // { id: "3", name: "Charades Chaos", host: "Sam", players: 2, maxPlayers: 10 },
 ];
 
 interface GameCardProps {
