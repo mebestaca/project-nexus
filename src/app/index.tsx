@@ -2,7 +2,7 @@ import { signInAnonymously, updateProfile } from "firebase/auth";
 import { Formik } from "formik";
 
 import { signinSchema } from "@/app/validation/signinSchema";
-import SigninForm from "@/component/auth/SigninForm";
+import SigninForm from "@/components/auth/SigninForm";
 import { auth } from "@/firebase/config";
 
 const initialValues = {
