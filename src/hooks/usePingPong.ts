@@ -35,8 +35,8 @@ export function usePingPong() {
 
   const [score, setScore] =
     useState<Score>({
-      player:0,
-      ai:0,
+      player1:0,
+      player2:0,
     });
 
   function resetBall(){
@@ -81,7 +81,7 @@ export function usePingPong() {
 
             setScore((old)=>({
               ...old,
-              player1:old.player+1,
+              player1:old.player1+1,
             }));
 
             resetBall();
@@ -94,7 +94,7 @@ export function usePingPong() {
 
             setScore((old)=>({
               ...old,
-              player2:old.player+1,
+              player2:old.player2+1,
             }));
 
             resetBall();

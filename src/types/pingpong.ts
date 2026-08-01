@@ -14,13 +14,13 @@ export interface Paddle {
 }
 
 export interface Score {
-    player: number;
-    ai: number;
+    player1: number;
+    player2: number;
 }
 
 export interface PingPongState {
     ball: Ball;
-    playerPaddle: Paddle;
-    aiPaddle: Paddle;
+    player1Paddle: Paddle;
+    player2Paddle: Paddle;
     score: Score;
 }
