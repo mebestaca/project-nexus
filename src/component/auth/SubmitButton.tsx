@@ -1,8 +1,6 @@
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
-
-import { useFormikContext } from "formik";
-
 import { styles } from "@/styles/shared";
+import { useFormikContext } from "formik";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
 type GuestFormValues = {
   displayName: string;
