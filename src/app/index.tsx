@@ -1,40 +1,76 @@
-import { signInAnonymously, updateProfile } from "firebase/auth";
+import { View } from "react-native";
+import { useRouter } from "expo-router";
 import { Formik } from "formik";
 
-import { signinSchema } from "@/app/validation/signinSchema";
+import {
+  signinSchema
+} from "@/app/validation/signinSchema";
+
 import SigninForm from "@/components/auth/SigninForm";
-import { auth } from "@/firebase/config";
+
+import {
+  signInUser
+} from "@/services/authService";
+
 
 const initialValues = {
-  displayName: "",
+  displayName:"",
 };
 
-export default function Index() {
-  const handleSubmit = async (
+
+export default function Index(){
+
+  const router =
+    useRouter();
+
+
+
+  async function handleSubmit(
     values: typeof initialValues,
-    { setSubmitting }: { setSubmitting: (value: boolean) => void },
-  ) => {
-    try {
-      const credential = await signInAnonymously(auth);
-
-      await updateProfile(credential.user, {
-        displayName: values.displayName,
-      });
-
-      // router.replace("/lobby");
-    } finally {
-      setSubmitting(false);
+    {
+      setSubmitting,
+    }: {
+      setSubmitting:(value:boolean)=>void;
     }
-  };
+  ){
 
-  return (
+    try{
+
+      await signInUser(
+        values.displayName
+      );
+
+
+      router.replace("/home");
+
+
+    } finally {
+
+      setSubmitting(false);
+
+    }
+
+  }
+
+
+
+  return(
+
     <Formik
       initialValues={initialValues}
       validationSchema={signinSchema}
       validateOnMount
       onSubmit={handleSubmit}
     >
-      <SigninForm />
+
+      <View>
+
+        <SigninForm />
+
+      </View>
+
     </Formik>
+
   );
+
 }
