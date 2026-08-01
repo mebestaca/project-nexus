@@ -1,75 +1,40 @@
+import { signInAnonymously, updateProfile } from "firebase/auth";
+import { Formik } from "formik";
+
+import { signinSchema } from "@/app/validation/signinSchema";
+import SigninForm from "@/component/auth/SigninForm";
 import { auth } from "@/firebase/config";
-import { Stack } from "expo-router";
-import { signInAnonymously } from "firebase/auth";
-import { Alert, Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const initialValues = {
-  name: "",
+  displayName: "",
 };
 
 export default function Index() {
   const handleSubmit = async (
     values: typeof initialValues,
-    {
-      setSubmitting,
-    }: {
-      setSubmitting: (isSubmitting: boolean) => void;
-    },
+    { setSubmitting }: { setSubmitting: (value: boolean) => void },
   ) => {
     try {
-      await signInAnonymously(auth);
-      // router.replace("/employee");
-    } catch (error: any) {
-      let message = "Something went wrong. Please try again.";
+      const credential = await signInAnonymously(auth);
 
-      switch (error.code) {
-        case "auth/invalid-email":
-          message =
-            "Please enter a valid email address (e.g., name@example.com).";
-          break;
+      await updateProfile(credential.user, {
+        displayName: values.displayName,
+      });
 
-        case "auth/invalid-credential":
-          message = "Invalid email or password.";
-          break;
-
-        case "auth/user-not-found":
-          message = "No account exists with this email.";
-          break;
-
-        case "auth/wrong-password":
-          message = "Incorrect password. Try again.";
-          break;
-
-        case "auth/network-request-failed":
-          message = "Network error. Check your internet connection.";
-          break;
-
-        default:
-          message = error.message;
-      }
-
-      Alert.alert("Sign In Failed", message);
+      // router.replace("/lobby");
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <>
-      <Stack.Screen options={{ headerShown: false }} />
-      <SafeAreaView>
-        <View>
-          <Text>🐾</Text>
-          <Text>Welcome</Text>
-
-          <Text></Text>
-
-          <Pressable onPress={() => {}}>
-            <Text>Play</Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
-    </>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={signinSchema}
+      validateOnMount
+      onSubmit={handleSubmit}
+    >
+      <SigninForm />
+    </Formik>
   );
 }
