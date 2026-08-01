@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
+
 import {
   Ball,
   Paddle,
   Score,
 } from "@/types/pingpong";
+
+import { moveBall } from "@/utils/physics";
+import {
+  paddleCollision,
+  wallCollision,
+} from "@/utils/collision";
 
 const TABLE_WIDTH = 350;
 const TABLE_HEIGHT = 500;
@@ -25,7 +32,7 @@ export function usePingPong() {
       height: 10,
     });
 
-  const [player2Paddle, setplayer2Paddle] =
+  const [player2Paddle, setPlayer2Paddle] =
     useState<Paddle>({
       x: 140,
       y: 30,
@@ -35,88 +42,112 @@ export function usePingPong() {
 
   const [score, setScore] =
     useState<Score>({
-      player1:0,
-      player2:0,
+      player1: 0,
+      player2: 0,
     });
 
-  function resetBall(){
+  function resetBall() {
 
     setBall({
-      x:170,
-      y:240,
-      size:15,
-      velocityX:4,
-      velocityY:4,
+      x: 170,
+      y: 240,
+      size: 15,
+      velocityX: 4,
+      velocityY: 4,
     });
 
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     const interval =
-      setInterval(()=>{
-        setBall((current)=>{
-          let newX =
-            current.x + current.velocityX;
+      setInterval(() => {
 
-          let newY =
-            current.y + current.velocityY;
+        setBall((current) => {
 
-          let velocityX =
-            current.velocityX;
+          let newBall =
+            moveBall(current);
 
-          let velocityY =
-            current.velocityY;
+          if (
+            wallCollision(
+              newBall,
+              TABLE_WIDTH
+            )
+          ) {
 
-          if(
-            newX <= 0 ||
-            newX >= TABLE_WIDTH-current.size
-          ){
-
-            velocityX =
-              -velocityX;
+            newBall.velocityX =
+              -newBall.velocityX;
 
           }
 
-          if(newY <= 0){
+          if (
+            paddleCollision(
+              newBall,
+              player1Paddle
+            )
+          ) {
 
-            setScore((old)=>({
+            newBall.velocityY =
+              -newBall.velocityY;
+
+          }
+
+          if (
+            paddleCollision(
+              newBall,
+              player2Paddle
+            )
+          ) {
+
+            newBall.velocityY =
+              -newBall.velocityY;
+
+          }
+
+          if (
+            newBall.y <= 0
+          ) {
+
+            setScore((old) => ({
               ...old,
-              player1:old.player1+1,
+              player1:
+                old.player1 + 1,
             }));
 
             resetBall();
 
           }
 
-          if(
-            newY >= TABLE_HEIGHT-current.size
-          ){
+          if (
+            newBall.y >= TABLE_HEIGHT
+          ) {
 
-            setScore((old)=>({
+            setScore((old) => ({
               ...old,
-              player2:old.player2+1,
+              player2:
+                old.player2 + 1,
             }));
 
             resetBall();
 
           }
 
-          return {
-            ...current,
-            x:newX,
-            y:newY,
-            velocityX,
-            velocityY,
-          };
+          return newBall;
+
         });
-      },16);
-    return ()=>clearInterval(interval);
-  },[]);
+      }, 16);
 
-  function movePlayer(
+    return () =>
+      clearInterval(interval);
+  }, [
+    player1Paddle,
+    player2Paddle,
+  ]);
+
+  function movePlayer1(
     x:number
-  ){
-    setPlayer1Paddle((old)=>({
+  ) {
+
+    setPlayer1Paddle((old) => ({
 
       ...old,
 
@@ -125,18 +156,39 @@ export function usePingPong() {
           0,
           Math.min(
             x,
-            TABLE_WIDTH-old.width
+            TABLE_WIDTH - old.width
           )
-        )
+        ),
 
     }));
 
   }
+
+  function movePlayer2(
+    x:number
+  ) {
+
+    setPlayer2Paddle((old) => ({
+
+      ...old,
+      x:
+        Math.max(
+          0,
+          Math.min(
+            x,
+            TABLE_WIDTH - old.width
+          )
+        ),
+    }));
+
+  }
+
   return {
     ball,
     player1Paddle,
     player2Paddle,
     score,
-    movePlayer,
+    movePlayer1,
+    movePlayer2,
   };
 }
