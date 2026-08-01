@@ -26,7 +26,7 @@ export default function Index() {
     try {
       await signInUser(values.displayName);
 
-      router.replace("/home");
+      router.replace("/create");
     } finally {
       setSubmitting(false);
     }
