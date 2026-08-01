@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import { signinSchema } from "@/app/validation/signinSchema";
 import SigninForm from "@/component/auth/SigninForm";
 import { auth } from "@/firebase/config";
+import { router } from "expo-router";
 
 const initialValues = {
   displayName: "",
@@ -21,7 +22,7 @@ export default function Index() {
         displayName: values.displayName,
       });
 
-      // router.replace("/lobby");
+      router.replace("/lobby");
     } finally {
       setSubmitting(false);
     }
