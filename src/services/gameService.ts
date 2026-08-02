@@ -14,6 +14,10 @@ export async function createGame(playerXId: string, playerOId: string) {
     playerX: playerXId,
     playerO: playerOId,
     winner: "",
+    score: {
+      playerX: 0,
+      playerO: 0,
+    },
   });
 
   return game.id;
