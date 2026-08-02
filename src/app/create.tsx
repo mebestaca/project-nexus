@@ -82,14 +82,12 @@ export default function CreateGameScreen() {
       });
 
       router.push({
-        pathname: "/lobby",
+        pathname: "/waiting",
         params: {
           lobbyId,
           gameType,
           gameId,
           isHost: "true",
-          playerId: hostId,
-          playerName: hostName,
         },
       });
     } catch (error) {
