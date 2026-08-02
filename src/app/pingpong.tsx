@@ -1,72 +1,64 @@
-import { View, StyleSheet, PanResponder } from "react-native";
-import Table from "@/components/pingpong/Table";
 import Ball from "@/components/pingpong/Ball";
 import Paddle from "@/components/pingpong/Paddle";
 import Scoreboard from "@/components/pingpong/Scoreboard";
+import Table from "@/components/pingpong/Table";
+import { useAuth } from "@/context/AuthContext";
 import { usePingPong } from "@/hooks/usePingPong";
+import { subscribeToPongGame } from "@/services/pingPongService";
+import { useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
+import { PanResponder, StyleSheet, View } from "react-native";
 
 export default function PingPongScreen() {
-    const {
-        ball,
-        player1Paddle,
-        player2Paddle,
-        score,
-        movePlayer1,
-    } = usePingPong();
+  const { gameId } = useLocalSearchParams<{ gameId: string }>();
+  const { user } = useAuth();
+  const [isPlayer1, setIsPlayer1] = useState<boolean | null>(null);
 
-    const panResponder = PanResponder.create({
+  useEffect(() => {
+    if (!gameId || !user) return;
+    const unsubscribe = subscribeToPongGame(gameId, (game) => {
+      if (!game) return;
+      setIsPlayer1(game.player1Id === user.uid);
+    });
+    return unsubscribe;
+  }, [gameId, user]);
 
-        onMoveShouldSetPanResponder: () => true,
-    
-        onPanResponderMove: (event) => {
-      
-          const x =
-            event.nativeEvent.locationX;
-            
-          movePlayer1(x);
-      
-        },
-      
-      });
+  const {
+    ball,
+    player1Paddle,
+    player2Paddle,
+    score,
+    movePlayer1,
+    movePlayer2,
+  } = usePingPong(gameId!, isPlayer1 === true);
 
-    return (
-        <View style={styles.container}>
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: (event) => {
+      const x = event.nativeEvent.locationX;
+      if (isPlayer1) {
+        movePlayer1(x);
+      } else {
+        movePlayer2(x);
+      }
+    },
+  });
 
-            <Scoreboard
-                player1={score.player1}
-                player2={score.player2}
-            />
+  if (isPlayer1 === null) return null;
 
-            <Table
-                {...panResponder.panHandlers}
-            >
+  return (
+    <View style={styles.container}>
+      <Scoreboard player1={score.player1} player2={score.player2} />
 
-                <Ball
-                    x={ball.x}
-                    y={ball.y}
-                    size={ball.size}
-                />
-
-                <Paddle
-                    {...player1Paddle}
-                />
-
-                <Paddle
-                    {...player2Paddle}
-                />
-
-            </Table>
-
-        </View>
-    );
+      <Table {...panResponder.panHandlers}>
+        <Ball x={ball.x} y={ball.y} size={ball.size} />
+        <Paddle {...player1Paddle} />
+        <Paddle {...player2Paddle} />
+      </Table>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-
-    container:{
-        flex:1,
-        justifyContent:"center",
-        alignItems:"center",
-    }
+  container: { flex: 1, justifyContent: "center", alignItems: "center" },
 });
-
