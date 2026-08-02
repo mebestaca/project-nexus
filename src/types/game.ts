@@ -10,5 +10,8 @@ export interface Game {
     playerX: string;
     playerO: string | null;
     winner: Player | "" | "draw";
-    
+    score: {
+        playerX: number;
+        playerO: number,
+    };
 }
