@@ -7,8 +7,15 @@ export interface Room {
   playerName: string;
   name: string;
   host: string;
-  players: number;
+  status: "waiting" | "started";
+  players: Player[];
   maxPlayers: number;
 }
 
-type GameType = "tictactoe" | "pong" | "spaceshooter";
+export interface Player {
+  id: string;
+  name: string;
+  ready: boolean;
+}
+
+export type GameType = "tictactoe" | "pong" | "spaceshooter";
