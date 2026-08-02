@@ -105,7 +105,10 @@ export default function WaitingRoomScreen() {
     let matchId: string;
 
     if (gameType === "tictactoe") {
-      matchId = await createGame(hostPlayer.id, otherPlayer.id);
+      matchId = await createGame(
+        { uid: hostPlayer.id, name: hostPlayer.name },
+        { uid: otherPlayer.id, name: otherPlayer.name },
+      );
     } else if (gameType === "rockpaperscissors") {
       const docRef = await createRPSGame(room.name, hostPlayer.id);
       matchId = docRef.id;
