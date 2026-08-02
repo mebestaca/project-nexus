@@ -3,7 +3,7 @@ import Paddle from "@/components/pingpong/Paddle";
 import Scoreboard from "@/components/pingpong/Scoreboard";
 import Table from "@/components/pingpong/Table";
 import { useAuth } from "@/context/AuthContext";
-import { usePingPong } from "@/hooks/usePingPong";
+import { TABLE_WIDTH, usePingPong } from "@/hooks/usePingPong";
 import { subscribeToPongGame } from "@/services/pingPongService";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -35,7 +35,9 @@ export default function PingPongScreen() {
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: (event) => {
-      const x = event.nativeEvent.locationX;
+      const rawX = event.nativeEvent.locationX;
+      const x = isPlayer1 ? rawX : TABLE_WIDTH - rawX;
+
       if (isPlayer1) {
         movePlayer1(x);
       } else {
@@ -50,15 +52,18 @@ export default function PingPongScreen() {
     <View style={styles.container}>
       <Scoreboard player1={score.player1} player2={score.player2} />
 
-      <Table {...panResponder.panHandlers}>
-        <Ball x={ball.x} y={ball.y} size={ball.size} />
-        <Paddle {...player1Paddle} />
-        <Paddle {...player2Paddle} />
-      </Table>
+      <View style={!isPlayer1 ? styles.rotated : undefined}>
+        <Table {...panResponder.panHandlers}>
+          <Ball x={ball.x} y={ball.y} size={ball.size} />
+          <Paddle {...player1Paddle} />
+          <Paddle {...player2Paddle} />
+        </Table>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
+  rotated: { transform: [{ rotate: "180deg" }] },
 });
