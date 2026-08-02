@@ -1,105 +1,72 @@
-import { Board, Player } from "@/types/fourinarow";
+import { Board, Cell, Player } from "@/types/fourinarow";
 
-export function checkWinner(
-    board: Board
-): Player | "draw" | null {
+export function flattenBoard(board: Board): Cell[] {
+  return board.flat();
+}
 
-    const rows = 6;
-    const cols = 7;
+export function unflattenBoard(flat: Cell[]): Board {
+  const board: Board = [];
+  for (let i = 0; i < 6; i++) {
+    board.push(flat.slice(i * 7, i * 7 + 7));
+  }
+  return board;
+}
 
-    function checkDirection(
-        row: number,
-        col: number,
-        rowDirection: number,
-        colDirection: number,
-    ): Player | null {
+export function checkWinner(board: Board): Player | "draw" | null {
+  const rows = 6;
+  const cols = 7;
 
-        const player =
-            board[row][col];
+  function checkDirection(
+    row: number,
+    col: number,
+    rowDirection: number,
+    colDirection: number,
+  ): Player | null {
+    const player = board[row][col];
 
-        if (!player) {
-            return null;
-        }
-
-        for (
-            let i = 1;
-            i < 4;
-            i++
-        ) {
-            const newRow =
-                row + rowDirection * i;
-
-            const newCol =
-                col + colDirection * i;
-
-            if (
-                newRow < 0 ||
-                newRow >= rows ||
-                newCol < 0 ||
-                newCol >= cols
-            ) {
-                return null;
-            }
-
-            if (
-                board[newRow][newCol] !== player
-            ) {
-                return null;
-            }
-        }
-
-        return player;
+    if (!player) {
+      return null;
     }
 
-    for (
-        let row = 0;
-        row < rows;
-        row++
-    ) {
-        for (
-            let col = 0;
-            col < cols;
-            col++
-        ) {
-            const directions = [
-                [0, 1],
-                [1, 0],
-                [1, 1],
-                [1, -1],
-            ];
+    for (let i = 1; i < 4; i++) {
+      const newRow = row + rowDirection * i;
+      const newCol = col + colDirection * i;
 
-            for (
-                const [
-                    rowDirection,
-                    colDirection,
-                ] of directions
-            ) {
-                const winner =
-                    checkDirection(
-                        row,
-                        col,
-                        rowDirection,
-                        colDirection
-                    );
+      if (newRow < 0 || newRow >= rows || newCol < 0 || newCol >= cols) {
+        return null;
+      }
 
-                if (winner) {
-                    return winner;
-                }
-            }
+      if (board[newRow][newCol] !== player) {
+        return null;
+      }
+    }
+
+    return player;
+  }
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const directions = [
+        [0, 1],
+        [1, 0],
+        [1, 1],
+        [1, -1],
+      ];
+
+      for (const [rowDirection, colDirection] of directions) {
+        const winner = checkDirection(row, col, rowDirection, colDirection);
+        if (winner) {
+          return winner;
         }
+      }
     }
+  }
 
-    const draw = 
-        board.every(
-            (row) =>
-                row.every(
-                    (cell) => cell !== ""
-                )
-        );
+  const draw = board.every((row) => row.every((cell) => cell !== ""));
 
-    if (draw) {
-        return "draw";
-    }
+  if (draw) {
+    return "draw";
+  }
 
-    return null;
+  return null;
 }
