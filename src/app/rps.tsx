@@ -52,13 +52,21 @@ export default function RPSScreen() {
         disabled={waiting || !!playerChoice}
       />
 
-      {result !== "" && <Button title="Next Round" onPress={nextRound} />}
+      {result !== "" && (
+        <View style={styles.actionButtons}>
+            <Button 
+                title="Next Round" 
+                onPress={nextRound} 
+            />
+        
+        <View style={styles.buttonSpacing} />
 
-      <Button
-        title="Back to Lobby"
-        onPress={leaveGame}
-      />
-      
+        <Button
+            title="Back to Lobby"
+            onPress={leaveGame}
+        />
+    </View>
+    )}
     </View>
   );
 }
@@ -70,4 +78,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: "#F5F5F5",
   },
+
+  actionButtons: {
+    marginTop: 30,
+  },
+
+  buttonSpacing: {
+    height: 12,
+  },
+  
 });
