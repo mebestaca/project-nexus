@@ -3,6 +3,7 @@ import { db } from "@/firebase/config";
 import { createFourInARowGame } from "@/services/fourInARowService";
 import { createGame } from "@/services/gameService";
 import { createRPSGame } from "@/services/rpsService";
+import { styles } from "@/styles/waiting";
 import { GameType, Player, Room } from "@/types/room";
 import { router, useLocalSearchParams } from "expo-router";
 import { deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -11,7 +12,6 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -142,6 +142,7 @@ export default function WaitingRoomScreen() {
       Alert.alert("Error", "Could not leave the room. Please try again.");
     }
   };
+
   if (loading) {
     return (
       <SafeAreaView style={styles.centered}>
@@ -224,45 +225,3 @@ export default function WaitingRoomScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F5F5F7", paddingHorizontal: 16 },
-  centered: { flex: 1, justifyContent: "center", alignItems: "center" },
-  title: { fontSize: 24, fontWeight: "700", marginTop: 12 },
-  subtitle: { fontSize: 14, color: "#666", marginBottom: 20 },
-  listContent: { paddingBottom: 12 },
-  playerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 10,
-  },
-  playerName: { fontSize: 16, fontWeight: "600" },
-  badge: { paddingVertical: 4, paddingHorizontal: 10, borderRadius: 20 },
-  badgeReady: { backgroundColor: "#DCFCE7" },
-  badgeWaiting: { backgroundColor: "#F3F4F6" },
-  badgeText: { fontSize: 12, fontWeight: "600", color: "#111827" },
-  buttonRow: { flexDirection: "row", gap: 12, marginBottom: 16 },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "#F3F4F6",
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  cancelButtonText: { color: "#111827", fontWeight: "700", fontSize: 16 },
-  actionButton: {
-    flex: 1,
-    backgroundColor: "#111827",
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  actionButtonReady: { backgroundColor: "#16A34A" },
-  actionButtonDisabled: { opacity: 0.4 },
-  actionButtonText: { color: "#FFFFFF", fontWeight: "700", fontSize: 16 },
-  badgeHost: { backgroundColor: "#DBEAFE" },
-});
