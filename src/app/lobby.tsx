@@ -1,11 +1,18 @@
 import { GameCard } from "@/components/lobby/GameCard";
+import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase/config";
 import { styles } from "@/styles/lobby";
 import { GameType, Room } from "@/types/room";
 import { router } from "expo-router";
-import { collectionGroup, onSnapshot } from "firebase/firestore";
+import {
+  arrayUnion,
+  collectionGroup,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity } from "react-native";
+import { Alert, FlatList, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const MOCK_GAMES: Room[] = [];
@@ -13,6 +20,7 @@ const MOCK_GAMES: Room[] = [];
 export default function GameListScreen() {
   const [games, setGames] = React.useState<Room[]>(MOCK_GAMES);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     const gameTypes: GameType[] = ["tictactoe", "pong", "spaceshooter"];
@@ -50,8 +58,40 @@ export default function GameListScreen() {
     return () => unsubscribes.forEach((unsub) => unsub());
   }, []);
 
-  const handleJoin = (gameId: string) => {
-    console.log("Joining game", gameId);
+  const handleJoin = async (room: Room) => {
+    if (!user) {
+      Alert.alert("Not signed in", "You must be logged in to join a game.");
+      return;
+    }
+
+    const gameRef = doc(db, "lobby", room.lobbyId, room.gameType, room.gameId);
+    const playerName = user.displayName || user.email || "Player";
+
+    try {
+      await updateDoc(gameRef, {
+        players: arrayUnion({
+          id: user.uid,
+          name: playerName,
+          ready: false,
+        }),
+      });
+    } catch (error) {
+      console.error("Error joining game:", error);
+      Alert.alert("Error", "Could not join the game.");
+      return;
+    }
+
+    router.push({
+      pathname: "/lobby",
+      params: {
+        lobbyId: room.lobbyId,
+        gameType: room.gameType,
+        gameId: room.gameId,
+        isHost: "false",
+        playerId: user.uid,
+        playerName,
+      },
+    });
   };
 
   const handleHostGame = () => {
