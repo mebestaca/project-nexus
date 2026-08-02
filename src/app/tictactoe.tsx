@@ -8,6 +8,7 @@ import { checkWinner } from "@/utils/winner";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, StyleSheet, View } from "react-native";
+import { router } from "expo-router";
 
 export default function GameScreen() {
   const { gameId } = useLocalSearchParams<{ gameId: string }>();
@@ -86,6 +87,10 @@ export default function GameScreen() {
     });
   }
 
+  function leaveGame() {
+    router.replace("/lobby");
+  }
+
   return (
     <View style={styles.container}>
       <Scoreboard
@@ -111,6 +116,11 @@ export default function GameScreen() {
       <Button
         title="Reset Match"
         onPress={resetMatch}
+      />
+
+      <Button
+        title="Back to Lobby"
+        onPress={leaveGame}
       />
 
     </View>
