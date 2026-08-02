@@ -15,14 +15,14 @@ export default function Scoreboard({
 }: Props) {
     return (
         <View style={styles.container}>
-            <View>
-                <Text>{player1Name}</Text>
-                <Text>{player1Score}</Text>
+           <View>
+                <Text style={styles.name}>{player1Name}</Text>
+                <Text style={styles.score}>{player1Score}</Text>
             </View>
 
             <View>
-                <Text>{player2Name}</Text>
-                <Text>{player2Score}</Text>
+                <Text style={styles.name}>{player2Name}</Text>
+                <Text style={styles.score}>{player2Score}</Text>
             </View>
         </View>
     );
@@ -34,14 +34,19 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         marginVertical: 20,
     },
-    label: {
-        textAlign: "center",
-        fontWeight: "700",
-        fontSize: 18,
-    },
     score: {
         textAlign: "center",
-        fontSize: 32,
+        fontSize: 42,
+        fontWeight: "900",
         marginTop: 8,
+        color: "#2563EB",
+    },
+
+    name: {
+        textAlign: "center",
+        fontSize: 20,
+        fontWeight: "800",
+        color: "#111827",
+        maxWidth: 120,
     },
 });
