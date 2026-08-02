@@ -18,4 +18,4 @@ export interface Player {
   ready: boolean;
 }
 
-export type GameType = "tictactoe" | "pong" | "spaceshooter";
+export type GameType = "tictactoe" | "rockpaperscissors" | "connectfour";

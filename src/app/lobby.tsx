@@ -23,7 +23,11 @@ export default function GameListScreen() {
   const { user } = useAuth();
 
   useEffect(() => {
-    const gameTypes: GameType[] = ["tictactoe", "pong", "spaceshooter"];
+    const gameTypes: GameType[] = [
+      "tictactoe",
+      "rockpaperscissors",
+      "connectfour",
+    ];
     const unsubscribes = gameTypes.map((gameType) => {
       const q = collectionGroup(db, gameType);
       return onSnapshot(q, (snapshot) => {

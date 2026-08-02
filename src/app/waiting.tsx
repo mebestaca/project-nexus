@@ -1,7 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase/config";
 import { createGame } from "@/services/gameService";
-import { createPongGame } from "@/services/pingPongService";
 import { GameType, Player, Room } from "@/types/room";
 import { router, useLocalSearchParams } from "expo-router";
 import { deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -54,7 +53,7 @@ export default function WaitingRoomScreen() {
 
       if (data.status === "started" && data.gameId) {
         router.replace({
-          pathname: gameType === "pong" ? "/pingpong" : "/tictactoe",
+          pathname: "/tictactoe",
           params: { gameId: data.gameId },
         });
       }
@@ -99,8 +98,6 @@ export default function WaitingRoomScreen() {
 
     if (gameType === "tictactoe") {
       matchId = await createGame(hostPlayer.id, otherPlayer.id);
-    } else if (gameType === "pong") {
-      matchId = await createPongGame(hostPlayer.id, otherPlayer.id);
     } else {
       return;
     }
