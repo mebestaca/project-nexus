@@ -1,19 +1,23 @@
+import { useAuth } from "@/context/AuthContext";
+import { db } from "@/firebase/config";
+import { styles } from "@/types/create";
 import { Picker } from "@react-native-picker/picker";
+import { useRouter } from "expo-router";
+import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { Formik, FormikHelpers } from "formik";
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import * as Yup from "yup";
-import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { CreateGameSchema } from "./validation/createSchema";
 
-type GameType = "tictactoe" | "arkanoid" | "spaceshooter";
+type GameType = "tictactoe" | "pong" | "spaceshooter";
 
 interface CreateGameValues {
   gameName: string;
@@ -22,23 +26,15 @@ interface CreateGameValues {
 
 const GAME_TYPES: { label: string; value: GameType }[] = [
   { label: "Tic Tac Toe", value: "tictactoe" },
-  { label: "Arkanoid", value: "arkanoid" },
+  { label: "Pong", value: "pong" },
   { label: "Space Shooter", value: "spaceshooter" },
 ];
 
-const CreateGameSchema = Yup.object().shape({
-  gameName: Yup.string()
-    .trim()
-    .min(3, "Game name must be at least 3 characters")
-    .max(30, "Game name must be 30 characters or less")
-    .required("Game name is required"),
-  gameType: Yup.string()
-    .oneOf(
-      ["tictactoe", "arkanoid", "spaceshooter"],
-      "Please select a game type",
-    )
-    .required("Please select a game type"),
-});
+const MAX_PLAYERS_BY_TYPE: Record<GameType, number> = {
+  tictactoe: 2,
+  pong: 2,
+  spaceshooter: 2,
+};
 
 const initialValues: CreateGameValues = {
   gameName: "",
@@ -46,14 +42,62 @@ const initialValues: CreateGameValues = {
 };
 
 export default function CreateGameScreen() {
-  const handleHostGame = (
+  const router = useRouter();
+  const { user } = useAuth();
+
+  const handleHostGame = async (
     values: CreateGameValues,
     { setSubmitting }: FormikHelpers<CreateGameValues>,
   ) => {
-    console.log("Hosting game:", values);
-    
-    router.push("/pingpong")
-    setSubmitting(false);
+    if (!user) {
+      Alert.alert("Not signed in", "You must be logged in to host a game.");
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const lobbyRef = doc(collection(db, "lobby"));
+      const lobbyId = lobbyRef.id;
+
+      const gameType = values.gameType as GameType;
+      const gameRef = doc(collection(db, "lobby", lobbyId, gameType));
+      const gameId = gameRef.id;
+
+      const hostId = user.uid;
+      const hostName = user.displayName || user.email || "Host";
+
+      await setDoc(lobbyRef, {
+        gameName: values.gameName.trim(),
+        gameType,
+        createdAt: serverTimestamp(),
+      });
+
+      await setDoc(gameRef, {
+        name: values.gameName.trim(),
+        host: hostName,
+        status: "waiting",
+        players: [{ id: hostId, name: hostName, ready: false }],
+        maxPlayers: MAX_PLAYERS_BY_TYPE[gameType],
+        createdAt: serverTimestamp(),
+      });
+
+      router.push({
+        pathname: "/lobby",
+        params: {
+          lobbyId,
+          gameType,
+          gameId,
+          isHost: "true",
+          playerId: hostId,
+          playerName: hostName,
+        },
+      });
+    } catch (error) {
+      console.error("Error hosting game:", error);
+      Alert.alert("Error", "Could not host the game. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -126,7 +170,9 @@ export default function CreateGameScreen() {
                 onPress={() => handleSubmit()}
                 disabled={isSubmitting}
               >
-                <Text style={styles.hostButtonText}>Host</Text>
+                <Text style={styles.hostButtonText}>
+                  {isSubmitting ? "Hosting..." : "Host"}
+                </Text>
               </TouchableOpacity>
             </View>
           )}
@@ -135,66 +181,3 @@ export default function CreateGameScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F5F5F7",
-    paddingHorizontal: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    marginTop: 12,
-    marginBottom: 24,
-  },
-  form: {
-    flex: 1,
-    justifyContent: "space-between",
-  },
-  field: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: "600",
-    marginBottom: 8,
-    color: "#333",
-  },
-  input: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 15,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-  },
-  pickerWrapper: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-    overflow: "hidden",
-  },
-  errorText: {
-    color: "#DC2626",
-    fontSize: 12,
-    marginTop: 4,
-  },
-  hostButton: {
-    backgroundColor: "#111827",
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  hostButtonDisabled: {
-    opacity: 0.5,
-  },
-  hostButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-});
