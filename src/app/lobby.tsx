@@ -30,7 +30,7 @@ export default function GameListScreen() {
                 lobbyId,
                 gameId: docSnap.id,
                 gameType,
-                name: data.gameName,
+                name: data.name,
                 host: data.players?.[0]?.name ?? "Unknown",
                 status: data.status,
                 players: data.players ?? [],
