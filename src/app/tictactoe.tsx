@@ -7,7 +7,7 @@ import { Board as BoardType, Game, Player } from "@/types/game";
 import { checkWinner } from "@/utils/winner";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
 import { router } from "expo-router";
 
 export default function GameScreen() {
@@ -33,6 +33,17 @@ export default function GameScreen() {
 
     const unsubscribe = subscribeToGame(gameId, (game: Game) => {
       if (!game) return;
+
+      if (game.status === "left") {
+        Alert.alert(
+          "Game ended",
+          "The other player left the match."
+        );
+        
+        router.replace("/lobby");
+        return;
+      }
+
       setBoard(game.board);
       setTurn(game.turn);
       setWinner(game.winner);
@@ -111,8 +122,10 @@ export default function GameScreen() {
     });
   }
 
-  function leaveGame() {
-    router.replace("/lobby");
+  async function leaveGame() {
+    await updateGame(gameId!, {
+        status: "left",
+    });
   }
 
   function GameButton({
