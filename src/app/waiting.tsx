@@ -53,7 +53,8 @@ export default function WaitingRoomScreen() {
   }, [lobbyId, gameType, gameId]);
 
   const currentPlayer = room?.players.find((p) => p.id === user?.uid);
-  const joiningPlayers = room?.players.filter((p) => p.id !== room.host) ?? [];
+  const joiningPlayers =
+    room?.players.filter((p) => p.name !== room.host) ?? [];
   const allReady =
     joiningPlayers.length > 0 && joiningPlayers.every((p) => p.ready);
 
