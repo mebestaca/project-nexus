@@ -4,16 +4,19 @@ import Scoreboard from "@/components/fourinarow/Scoreboard";
 import Status from "@/components/fourinarow/Status";
 import { useFourInARow } from "@/hooks/useFourInARow";
 import { useLocalSearchParams } from "expo-router";
-import { Button, StyleSheet, View } from "react-native";
+import { TouchableOpacity, StyleSheet, View, ScrollView, Text } from "react-native";
 
 export default function FourInARowScreen() {
   const { gameId } = useLocalSearchParams<{ gameId: string }>();
 
-  const { board, turn, winner, score, dropPiece, resetBoard, resetMatch } =
+  const { board, turn, winner, score, dropPiece, resetBoard, resetMatch, leaveGame } =
     useFourInARow(gameId!);
 
   return (
-    <View style={styles.container}>
+    <ScrollView 
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+    >
       <Scoreboard player1={score.player1} player2={score.player2} />
       <Status turn={turn} winner={winner} />
 
@@ -24,22 +27,67 @@ export default function FourInARowScreen() {
       </View>
 
       <Board board={board} />
+      
+      {winner !== "" && (
+        <View style={styles.buttons}>
 
-      <View style={styles.buttons}>
-        <Button title="Next Round" onPress={resetBoard} />
-        <Button title="Reset Match" onPress={resetMatch} />
-      </View>
-    </View>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={resetBoard}
+            >
+                <Text style={styles.buttonText}>
+                    Next Round
+                </Text>
+
+            </TouchableOpacity>
+    
+    
+            <TouchableOpacity
+                style={styles.button}
+                onPress={leaveGame}
+            >
+                <Text style={styles.buttonText}>
+                    Back to Lobby
+                </Text>
+
+            </TouchableOpacity>
+    
+        </View>
+      )}
+      
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5F5F5",
-  },
-  columns: { flexDirection: "row", marginBottom: 8 },
-  buttons: { flexDirection: "row", marginTop: 20, gap: 20 },
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#F5F5F5",
+    },
+
+    columns: { 
+        flexDirection: "row", 
+        marginBottom: 8 
+    },
+
+    buttons:{
+        marginTop:30,
+        width:"100%",
+    },
+
+    button:{
+        backgroundColor:"#2563EB",
+        paddingVertical:16,
+        borderRadius:12,
+        alignItems:"center",
+        marginVertical:8,
+    },
+
+    buttonText:{
+        color:"#FFFFFF",
+        fontSize:18,
+        fontWeight:"700",
+    },
 });

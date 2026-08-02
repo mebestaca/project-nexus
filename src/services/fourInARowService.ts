@@ -116,3 +116,11 @@ export async function getGame(gameId: string) {
 
   return snapshot.data() as FourInARowGame;
 }
+
+export async function leaveGame(gameId: string) {
+    const gameRef = doc(db, "games", gameId);
+
+    await updateDoc(gameRef, {
+        status: "left",
+    });
+}

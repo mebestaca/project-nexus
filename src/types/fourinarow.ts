@@ -9,7 +9,11 @@ export interface FourInARowGame {
   gameName: string;
   host: string;
   guest: string | null;
-  status: "waiting" | "playing" | "finished";
+  status: 
+    | "waiting" 
+    | "playing" 
+    | "finished"
+    | "left";
   board: Cell[];
   turn: Player;
   winner: Player | "draw" | "";

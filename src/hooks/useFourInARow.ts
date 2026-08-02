@@ -4,10 +4,12 @@ import {
   resetMatch as resetMatchService,
   subscribeToGame,
   updateBoard,
+  leaveGame
 } from "@/services/fourInARowService";
 import { Board, FourInARowGame, Player } from "@/types/fourinarow";
 import { checkWinner, unflattenBoard } from "@/utils/fourInARowWinner";
 import { useEffect, useState } from "react";
+import { router } from "expo-router";
 
 const EMPTY_BOARD: Board = Array.from({ length: 6 }, () => Array(7).fill(""));
 
@@ -17,7 +19,15 @@ export function useFourInARow(gameId: string) {
 
   useEffect(() => {
     if (!gameId) return;
-    const unsubscribe = subscribeToGame(gameId, (g) => setGame(g));
+    const unsubscribe = subscribeToGame(gameId, (g) => {
+
+        if (g.status === "left") {
+            router.replace("/lobby");
+            return;
+        }
+        setGame(g);
+    });
+
     return unsubscribe;
   }, [gameId]);
 
@@ -73,5 +83,22 @@ export function useFourInARow(gameId: string) {
     await resetMatchService(gameId);
   }
 
-  return { board, turn, winner, score, dropPiece, resetBoard, resetMatch };
+  async function handleLeaveGame() {
+    if (!gameId) return;
+
+    await leaveGame(gameId);
+  }
+
+  return { 
+    board, 
+    turn, 
+    winner, 
+    score, 
+    dropPiece, 
+    resetBoard, 
+    resetMatch,
+    leaveGame: handleLeaveGame
+  };
 }
+
+  
