@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { Auth, getAuth, initializeAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { Platform } from "react-native";
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -11,20 +10,8 @@ const firebaseConfig = {
   messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
-console.log("FIREBASE CONFIG:", firebaseConfig);
+
 const app = initializeApp(firebaseConfig);
 
-export let auth: Auth;
-
-if (Platform.OS === "web") {
-  auth = getAuth(app);
-} else {
-  const AsyncStorage =
-    require("@react-native-async-storage/async-storage").default;
-  const { getReactNativePersistence } = require("firebase/auth");
-  auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage),
-  });
-}
-
+export const auth = getAuth(app);
 export const db = getFirestore(app);
