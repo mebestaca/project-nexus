@@ -7,9 +7,16 @@ interface Props {
         | Player
         | "draw"
         | "";
+    player1Name: string;
+    player2Name: string;
 }
 
-export default function Status({turn, winner}: Props) {
+export default function Status({
+    turn, 
+    winner,
+    player1Name,
+    player2Name,
+}: Props) {
     let message="";
 
     if(winner === "draw") {
@@ -18,14 +25,14 @@ export default function Status({turn, winner}: Props) {
     else if(winner) {
         message =
             winner==="R"
-            ? "Red wins 🎉"
-            : "Yellow wins 🎉";
+            ? `${player1Name} wins 🎉`
+            : `${player2Name} wins 🎉`;
     }
     else{
         message = 
         turn==="R"
-        ? "Red's turn"
-        : "Yellow's turn";
+        ? `${player1Name}'s turn`
+        : `${player2Name}'s turn `;
     }
 
     return (

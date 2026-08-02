@@ -10,7 +10,13 @@ import {
     updateDoc,
 } from "firebase/firestore";
 
-export async function createFourInARowGame(gameName: string, host: string) {
+export async function createFourInARowGame(
+    gameName: string, 
+    host: {
+        uid: string;
+        name: string;
+    }
+) {
   const board: Board = Array.from({ length: 6 }, () => Array(7).fill(""));
 
   return await addDoc(collection(db, "games"), {
@@ -29,7 +35,13 @@ export async function createFourInARowGame(gameName: string, host: string) {
   });
 }
 
-export async function joinFourInARowGame(gameId: string, guest: string) {
+export async function joinFourInARowGame(
+    gameId: string, 
+    guest: {
+        uid: string;
+        name: string;
+    }
+) {
   const gameRef = doc(db, "games", gameId);
 
   await updateDoc(gameRef, {
@@ -58,14 +70,17 @@ export async function updateBoard(
   });
 }
 
-export async function resetBoard(gameId: string) {
+export async function resetBoard(
+    gameId: string,
+    nextTurn: Player
+) {
   const board: Board = Array.from({ length: 6 }, () => Array(7).fill(""));
 
   const gameRef = doc(db, "games", gameId);
 
   await updateDoc(gameRef, {
     board: flattenBoard(board),
-    turn: "R",
+    turn: nextTurn,
     winner: "",
   });
 }

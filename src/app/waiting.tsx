@@ -121,8 +121,18 @@ export default function WaitingRoomScreen() {
         name: otherPlayer.name,
       });
     } else if (gameType === "connectfour") {
-      const docRef = await createFourInARowGame(room.name, hostPlayer.id);
+      const docRef = await createFourInARowGame(room.name, {
+        uid: hostPlayer.id,
+        name: hostPlayer.name,
+      });
       matchId = docRef.id;
+
+      await updateDoc(docRef, {
+        guest: {
+          uid: otherPlayer.id,
+          name:otherPlayer.name,
+        },
+      });
     } else {
       return;
     }

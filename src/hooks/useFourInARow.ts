@@ -31,13 +31,15 @@ export function useFourInARow(gameId: string) {
     return unsubscribe;
   }, [gameId]);
 
-  const isHost = !!game && !!user && game.host === user.uid;
+  const isHost = !!game && !!user && game.host.uid === user.uid;
   const mySymbol: Player = isHost ? "R" : "Y";
 
   const board: Board = game ? unflattenBoard(game.board as any) : EMPTY_BOARD;
   const turn = game?.turn ?? "R";
   const winner = game?.winner ?? "";
   const score = game?.score ?? { player1: 0, player2: 0 };
+  const player1Name = game?.host.name ?? "Player 1";
+  const player2Name = game?.guest?.name ?? "Waiting...";
 
   async function dropPiece(column: number) {
     if (!game || !gameId) return;
@@ -74,8 +76,18 @@ export function useFourInARow(gameId: string) {
   }
 
   async function resetBoard() {
-    if (!gameId) return;
-    await resetBoardService(gameId);
+    if (!game || !gameId) return;
+
+    let nextTurn: Player;
+
+    if (game.winner === "R") {
+        nextTurn = "Y";
+      } else if (game.winner === "Y") {
+        nextTurn = "R";
+      } else {
+        nextTurn = "R";
+      }
+    await resetBoardService(gameId, nextTurn);
   }
 
   async function resetMatch() {
@@ -93,7 +105,9 @@ export function useFourInARow(gameId: string) {
     board, 
     turn, 
     winner, 
-    score, 
+    score,
+    player1Name,
+    player2Name,
     dropPiece, 
     resetBoard, 
     resetMatch,

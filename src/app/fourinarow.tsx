@@ -9,7 +9,17 @@ import { TouchableOpacity, StyleSheet, View, ScrollView, Text } from "react-nati
 export default function FourInARowScreen() {
   const { gameId } = useLocalSearchParams<{ gameId: string }>();
 
-  const { board, turn, winner, score, dropPiece, resetBoard, resetMatch, leaveGame } =
+  const { 
+    board, 
+    turn, 
+    winner, 
+    score, 
+    player1Name,
+    player2Name,
+    dropPiece, 
+    resetBoard, 
+    resetMatch, 
+    leaveGame } =
     useFourInARow(gameId!);
 
   return (
@@ -17,8 +27,18 @@ export default function FourInARowScreen() {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
     >
-      <Scoreboard player1={score.player1} player2={score.player2} />
-      <Status turn={turn} winner={winner} />
+      <Scoreboard 
+        player1Name={player1Name}
+        player2Name={player2Name}
+        player1Score={score.player1} 
+        player2Score={score.player2} 
+      />
+      <Status 
+        turn={turn} 
+        winner={winner} 
+        player1Name={player1Name}
+        player2Name={player2Name}
+       />
 
       <View style={styles.columns}>
         {Array.from({ length: 7 }).map((_, index) => (
