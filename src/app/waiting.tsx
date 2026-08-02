@@ -56,7 +56,7 @@ export default function WaitingRoomScreen() {
       const ROUTE_BY_GAME_TYPE: Record<GameType, string> = {
         tictactoe: "/tictactoe",
         rockpaperscissors: "/rps",
-        connectfour: "/connectfour",
+        connectfour: "/fourinarow",
       };
 
       if (data.status === "started" && data.gameId) {

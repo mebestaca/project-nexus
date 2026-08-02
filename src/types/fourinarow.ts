@@ -10,7 +10,7 @@ export interface FourInARowGame {
   host: string;
   guest: string | null;
   status: "waiting" | "playing" | "finished";
-  board: Cell[]; // flat, as stored in Firestore
+  board: Cell[];
   turn: Player;
   winner: Player | "draw" | "";
   score: { player1: number; player2: number };
