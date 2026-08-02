@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase/config";
 import { createGame } from "@/services/gameService";
+import { createPongGame } from "@/services/pingPongService";
 import { GameType, Player, Room } from "@/types/room";
 import { router, useLocalSearchParams } from "expo-router";
 import { deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -53,7 +54,7 @@ export default function WaitingRoomScreen() {
 
       if (data.status === "started" && data.gameId) {
         router.replace({
-          pathname: "/tictactoe",
+          pathname: data.gameType === "pong" ? "/pingpong" : "/tictactoe",
           params: { gameId: data.gameId },
         });
       }
@@ -83,24 +84,28 @@ export default function WaitingRoomScreen() {
     if (!room || !lobbyId || !gameType || !gameId) return;
 
     const gameRef = doc(db, "lobby", lobbyId, gameType, gameId);
+    const hostPlayer = room.players.find((p) => p.name === room.host);
+    const otherPlayer = room.players.find((p) => p.name !== room.host);
+
+    if (!hostPlayer || !otherPlayer) {
+      Alert.alert(
+        "Not enough players",
+        "This game needs two players to start.",
+      );
+      return;
+    }
+
+    let matchId: string;
 
     if (gameType === "tictactoe") {
-      const hostPlayer = room.players.find((p) => p.name === room.host);
-      const otherPlayer = room.players.find((p) => p.name !== room.host);
-
-      if (!hostPlayer || !otherPlayer) {
-        Alert.alert(
-          "Not enough players",
-          "Tic Tac Toe needs two players to start.",
-        );
-        return;
-      }
-
-      const ticTacToeGameId = await createGame(hostPlayer.id, otherPlayer.id);
-      await updateDoc(gameRef, { status: "started", gameId: ticTacToeGameId });
+      matchId = await createGame(hostPlayer.id, otherPlayer.id);
+    } else if (gameType === "pong") {
+      matchId = await createPongGame(hostPlayer.id, otherPlayer.id);
     } else {
-      await updateDoc(gameRef, { status: "started" });
+      return;
     }
+
+    await updateDoc(gameRef, { status: "started", gameId: matchId });
   };
 
   const handleCancel = async () => {
