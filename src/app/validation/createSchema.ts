@@ -7,6 +7,9 @@ export const CreateGameSchema = Yup.object().shape({
     .max(30, "Game name must be 30 characters or less")
     .required("Game name is required"),
   gameType: Yup.string()
-    .oneOf(["tictactoe", "pong", "spaceshooter"], "Please select a game type")
+    .oneOf(
+      ["tictactoe", "rockpaperscissors", "connectfour"],
+      "Please select a game type",
+    )
     .required("Please select a game type"),
 });
