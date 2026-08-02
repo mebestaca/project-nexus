@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 
 interface RoomCardProps {
   room: Room;
-  onJoin: (gameId: string) => void;
+  onJoin: (room: Room) => void;
 }
 
 export function GameCard({ room, onJoin }: RoomCardProps) {
@@ -17,10 +17,7 @@ export function GameCard({ room, onJoin }: RoomCardProps) {
           players
         </Text>
       </View>
-      <TouchableOpacity
-        style={styles.joinButton}
-        onPress={() => onJoin(room.lobbyId)}
-      >
+      <TouchableOpacity style={styles.joinButton} onPress={() => onJoin(room)}>
         <Text style={styles.joinButtonText}>Join</Text>
       </TouchableOpacity>
     </View>
