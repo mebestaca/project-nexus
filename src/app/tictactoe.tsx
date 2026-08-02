@@ -103,12 +103,19 @@ export default function GameScreen() {
       : winner;
 
   async function nextRound() {
-    const nextStarter = turn === "X" ? "O" : "X";
+    let nextStarter: Player;
+
+    if (winner === "X") {
+      nextStarter = "O";
+    } else if (winner === "O") {
+      nextStarter = "X";
+    } else {
+      nextStarter = "X";
+    }
 
     await updateGame(gameId!, {
       board: Array(9).fill(""),
       turn: nextStarter,
-      startingPlayer: nextStarter,
       winner: "",
     });
   }
