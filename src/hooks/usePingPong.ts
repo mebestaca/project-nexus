@@ -52,7 +52,6 @@ export function usePingPong(gameId: string, isHost: boolean) {
 
       // Whichever paddle isn't "mine," always trust Firestore for it
       if (isHost) {
-        console.log("HOST receiving player2 x:", game.player2Paddle.x);
         setPlayer2Paddle(game.player2Paddle);
       } else {
         setPlayer1Paddle(game.player1Paddle);
@@ -137,7 +136,6 @@ export function usePingPong(gameId: string, isHost: boolean) {
       0,
       Math.min(x, TABLE_WIDTH - player2PaddleRef.current.width),
     );
-    console.log("JOINER sending x:", clampedX);
     const updated = { ...player2PaddleRef.current, x: clampedX };
     setPlayer2Paddle(updated);
     if (gameId) updatePongGame(gameId, { player2Paddle: updated });
