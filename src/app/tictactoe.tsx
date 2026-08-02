@@ -155,6 +155,8 @@ export default function GameScreen() {
         onMove={play} 
       />
 
+    {winner !== "" && (
+      <>
       <GameButton
         title="Next Round"
         onPress={nextRound}
@@ -169,6 +171,8 @@ export default function GameScreen() {
         title="Back to Lobby"
         onPress={leaveGame}
       />
+      </>
+    )}
 
     </View>
   );
