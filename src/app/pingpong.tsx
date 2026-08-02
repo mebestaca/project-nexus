@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, PanResponder } from "react-native";
 import Table from "@/components/pingpong/Table";
 import Ball from "@/components/pingpong/Ball";
 import Paddle from "@/components/pingpong/Paddle";
@@ -11,7 +11,23 @@ export default function PingPongScreen() {
         player1Paddle,
         player2Paddle,
         score,
+        movePlayer1,
     } = usePingPong();
+
+    const panResponder = PanResponder.create({
+
+        onMoveShouldSetPanResponder: () => true,
+    
+        onPanResponderMove: (event) => {
+      
+          const x =
+            event.nativeEvent.locationX;
+            
+          movePlayer1(x);
+      
+        },
+      
+      });
 
     return (
         <View style={styles.container}>
@@ -21,7 +37,9 @@ export default function PingPongScreen() {
                 player2={score.player2}
             />
 
-            <Table>
+            <Table
+                {...panResponder.panHandlers}
+            >
 
                 <Ball
                     x={ball.x}

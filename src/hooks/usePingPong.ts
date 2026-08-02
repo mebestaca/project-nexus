@@ -46,14 +46,20 @@ export function usePingPong() {
       player2: 0,
     });
 
-  function resetBall() {
+  function resetBall(direction: "up" | "down") {
 
     setBall({
       x: 170,
       y: 240,
       size: 15,
-      velocityX: 4,
-      velocityY: 4,
+      
+      velocityX:
+        Math.random() > 0.5 ? 4 : -4,
+
+      velocityY:
+        direction === "up"
+            ? -4
+            : 4,
     });
 
   }
@@ -86,8 +92,11 @@ export function usePingPong() {
             )
           ) {
 
-            newBall.velocityY =
-              -newBall.velocityY;
+            newBall.y =
+            player1Paddle.y - newBall.size;
+         
+          newBall.velocityY =
+            -Math.abs(newBall.velocityY);
 
           }
 
@@ -98,8 +107,12 @@ export function usePingPong() {
             )
           ) {
 
-            newBall.velocityY =
-              -newBall.velocityY;
+            newBall.y =
+            player2Paddle.y +
+            player2Paddle.height;
+         
+          newBall.velocityY =
+            Math.abs(newBall.velocityY);
 
           }
 
@@ -113,7 +126,15 @@ export function usePingPong() {
                 old.player1 + 1,
             }));
 
-            resetBall();
+            resetBall("down");
+
+            return {
+                x:170,
+                y:240,
+                size:15,
+                velocityX:4,
+                velocityY:4,
+            };
 
           }
 
@@ -127,8 +148,16 @@ export function usePingPong() {
                 old.player2 + 1,
             }));
 
-            resetBall();
-
+            resetBall("up");
+            
+            return {
+                x:170,
+                y:240,
+                size:15,
+                velocityX:4,
+                velocityY:4,
+            };
+            
           }
 
           return newBall;
