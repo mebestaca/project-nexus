@@ -15,7 +15,7 @@ export async function createGame(
   playerO: {
     uid: string;
     name: string;
-  } | null
+  } 
 ) {
   const game = await addDoc(collection(db, "games"), {
     board: ["", "", "", "", "", "", "", "", ""],
@@ -23,6 +23,7 @@ export async function createGame(
     playerX,
     playerO,
     winner: "",
+    status: "playing",
     score: {
       playerX: 0,
       playerO: 0,
