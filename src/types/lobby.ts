@@ -1,4 +1,4 @@
-export type GameType = "tictactoe" | "arkanoid" | "bullethell";
+export type GameType = "tictactoe" | "rockpaperscissors" | "connectfour";
 
 export interface Lobby {
   id: string;
