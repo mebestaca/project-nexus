@@ -54,7 +54,7 @@ export default function WaitingRoomScreen() {
 
       if (data.status === "started" && data.gameId) {
         router.replace({
-          pathname: data.gameType === "pong" ? "/pingpong" : "/tictactoe",
+          pathname: gameType === "pong" ? "/pingpong" : "/tictactoe",
           params: { gameId: data.gameId },
         });
       }
