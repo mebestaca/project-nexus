@@ -30,7 +30,7 @@ export function useRPS(gameId: string) {
     return unsubscribe;
 }, [gameId]);
 
-  const isPlayer1 = !!game && !!user && game.host === user.uid;
+  const isPlayer1 = !!game && !!user && game.host.uid === user.uid;
 
   useEffect(() => {
     if (!game || !isPlayer1) return;
@@ -74,6 +74,18 @@ export function useRPS(gameId: string) {
       : { player1: game.score.player2, player2: game.score.player1 }
     : { player1: 0, player2: 0 };
 
+  const myName = game
+    ? isPlayer1
+      ? game.host.name
+      : game.guest?.name ?? "Waiting..."
+    : "";
+  
+  const opponentName = game
+    ? isPlayer1
+      ? game.guest?.name ?? "Waiting..."
+      : game.host.name
+    : "";
+
   const waiting = !!playerChoice && !opponentChoice;
   const revealOpponent = !!game?.currentRound.winner;
 
@@ -100,6 +112,8 @@ export function useRPS(gameId: string) {
     score,
     result,
     waiting,
+    myName,
+    opponentName,
     selectChoice,
     nextRound: handleNextRound,
     leaveGame: handleLeaveGame,

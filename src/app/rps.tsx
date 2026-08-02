@@ -17,6 +17,8 @@ export default function RPSScreen() {
     score,
     result,
     waiting,
+    myName,
+    opponentName,
     selectChoice,
     nextRound,
     leaveGame
@@ -27,9 +29,16 @@ export default function RPSScreen() {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
     >
-      <Scoreboard player1={score.player1} player2={score.player2} />
+      <Scoreboard 
+            player1Name={myName} 
+            player2Name={opponentName}
+            player1Score={score.player1}
+            player2Score={score.player2}
+       />
 
       <ChoiceDisplay
+        playerName={myName}
+        opponentName={opponentName}
         playerChoice={playerChoice}
         opponentChoice={
             revealOpponent ? opponentChoice: null}

@@ -2,25 +2,29 @@ import { StyleSheet, Text, View } from "react-native";
 import { RPSChoice } from "@/types/rps";
 
 interface Props {
+    playerName: string;
+    opponentName: string;
     playerChoice: RPSChoice | null;
     opponentChoice: RPSChoice | null;
 }
 
 export default function ChoiceDisplay({
+    playerName,
+    opponentName,
     playerChoice,
     opponentChoice,
 }: Props) {
     return (
         <View style={styles.container}>
             <View>
-                <Text style={styles.title}>You</Text>
+                <Text style={styles.title}>{playerName}</Text>
                 <Text style={styles.choice}>
                     {playerChoice ?? "-"}
                 </Text>
             </View>
 
             <View>
-                <Text style={styles.title}>Opponent</Text>
+                <Text style={styles.title}>{opponentName}</Text>
                 <Text style={styles.choice}>
                     {opponentChoice ?? "-"}
                 </Text>

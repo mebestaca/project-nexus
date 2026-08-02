@@ -1,34 +1,28 @@
 import { StyleSheet, Text, View } from "react-native";
 
 interface Props {
-    player1: number;
-    player2: number;
+    player1Name: string;
+    player2Name: string;
+    player1Score: number;
+    player2Score: number;
 }
 
 export default function Scoreboard({
-    player1,
-    player2,
+    player1Name,
+    player2Name,
+    player1Score,
+    player2Score,
 }: Props) {
     return (
         <View style={styles.container}>
             <View>
-                <Text style={styles.label}>
-                    You
-                </Text>
-
-                <Text style={styles.score}>
-                    {player1}
-                </Text>
+                <Text>{player1Name}</Text>
+                <Text>{player1Score}</Text>
             </View>
 
             <View>
-                <Text style={styles.label}>
-                    Opponent
-                </Text>
-
-                <Text style={styles.score}>
-                    {player2}
-                </Text>
+                <Text>{player2Name}</Text>
+                <Text>{player2Score}</Text>
             </View>
         </View>
     );

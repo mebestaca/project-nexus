@@ -23,8 +23,14 @@ export interface RPSRound {
 export interface RPSGame {
     id: string;
     gameName: string;
-    host: string;
-    guest: string | null;
+    host: {
+        uid: string;
+        name: string;
+    };
+    guest: {
+        uid: string;
+        name: string;
+    } | null;
     status:
         | "waiting"
         | "playing"
