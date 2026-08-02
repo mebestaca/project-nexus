@@ -7,7 +7,7 @@ import { Board as BoardType, Game, Player } from "@/types/game";
 import { checkWinner } from "@/utils/winner";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
+import { ScrollView, StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
 import { router } from "expo-router";
 
 export default function GameScreen() {
@@ -160,7 +160,10 @@ export default function GameScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView 
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       <Scoreboard
         playerXName={playerX.name}
         playerOName={playerO?.name ?? "Waiting..."}
@@ -197,15 +200,16 @@ export default function GameScreen() {
       </>
     )}
 
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingVertical: 30,
   },
 
   button: {

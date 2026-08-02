@@ -5,7 +5,7 @@ import Scoreboard from "@/components/rps/Scoreboard";
 import WaitingChoice from "@/components/rps/WaitingChoice";
 import { useRPS } from "@/hooks/useRPS";
 import { useLocalSearchParams } from "expo-router";
-import { Button, StyleSheet, View } from "react-native";
+import { Button, ScrollView, StyleSheet, View } from "react-native";
 
 export default function RPSScreen() {
   const { gameId } = useLocalSearchParams<{ gameId: string }>();
@@ -23,7 +23,10 @@ export default function RPSScreen() {
   } = useRPS(gameId!);
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+    >
       <Scoreboard player1={score.player1} player2={score.player2} />
 
       <ChoiceDisplay
@@ -67,15 +70,16 @@ export default function RPSScreen() {
         />
     </View>
     )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: "center",
     paddingHorizontal: 20,
+    paddingVertical: 30,
     backgroundColor: "#F5F5F5",
   },
 
@@ -86,5 +90,5 @@ const styles = StyleSheet.create({
   buttonSpacing: {
     height: 12,
   },
-  
+
 });
