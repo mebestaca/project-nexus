@@ -24,6 +24,9 @@ export default function Index() {
       await signInUser(values.displayName);
 
       router.replace("/lobby");
+    } catch (error) {
+      console.error("Sign-in failed:", error);
+      alert("Sign-in failed: " + (error as Error).message);
     } finally {
       setSubmitting(false);
     }
