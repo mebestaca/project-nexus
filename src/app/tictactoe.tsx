@@ -139,8 +139,10 @@ export default function GameScreen() {
   return (
     <View style={styles.container}>
       <Scoreboard
-        playerX={score.playerX}
-        playerO={score.playerO}
+        playerXName={playerX.name}
+        playerOName={playerO?.name ?? "Waiting..."}
+        playerXScore={score.playerX}
+        playerOScore={score.playerO}
       />
 
       <Status 
