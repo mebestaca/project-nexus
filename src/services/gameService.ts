@@ -20,6 +20,7 @@ export async function createGame(
   const game = await addDoc(collection(db, "games"), {
     board: ["", "", "", "", "", "", "", "", ""],
     turn: "X",
+    startingPlayer: "X",
     playerX,
     playerO,
     winner: "",
