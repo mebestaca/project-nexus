@@ -36,17 +36,17 @@ const styles = StyleSheet.create({
     },
     score: {
         textAlign: "center",
-        fontSize: 42,
-        fontWeight: "900",
-        marginTop: 8,
-        color: "#2563EB",
+        fontSize: 25,
+        fontWeight: "500",
+        marginTop: 20,
+        color: "#111827",
     },
 
     name: {
         textAlign: "center",
-        fontSize: 20,
-        fontWeight: "800",
+        fontSize: 28,
+        fontWeight: "700",
         color: "#111827",
-        maxWidth: 120,
+        maxWidth: 180
     },
 });
