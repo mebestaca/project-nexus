@@ -53,8 +53,9 @@ export default function WaitingRoomScreen() {
   }, [lobbyId, gameType, gameId]);
 
   const currentPlayer = room?.players.find((p) => p.id === user?.uid);
+  const joiningPlayers = room?.players.filter((p) => p.id !== room.host) ?? [];
   const allReady =
-    room && room.players.length > 0 && room.players.every((p) => p.ready);
+    joiningPlayers.length > 0 && joiningPlayers.every((p) => p.ready);
 
   const handleToggleReady = async () => {
     if (!room || !currentPlayer || !lobbyId || !gameType || !gameId) return;
