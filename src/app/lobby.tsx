@@ -64,6 +64,14 @@ export default function GameListScreen() {
       return;
     }
 
+    if (room.players.length >= room.maxPlayers) {
+      Alert.alert(
+        "Room full",
+        "This room already has the maximum number of players.",
+      );
+      return;
+    }
+
     const gameRef = doc(db, "lobby", room.lobbyId, room.gameType, room.gameId);
     const playerName = user.displayName || user.email || "Player";
 
@@ -82,14 +90,12 @@ export default function GameListScreen() {
     }
 
     router.push({
-      pathname: "/lobby",
+      pathname: "/waiting",
       params: {
         lobbyId: room.lobbyId,
         gameType: room.gameType,
         gameId: room.gameId,
         isHost: "false",
-        playerId: user.uid,
-        playerName,
       },
     });
   };
