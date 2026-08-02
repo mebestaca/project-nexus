@@ -1,19 +1,11 @@
 import { auth } from "@/firebase/config";
-import {
-    User,
-    createUserWithEmailAndPassword,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    signOut,
-} from "firebase/auth";
+import { User, onAuthStateChanged, signOut } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   logout: () => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,22 +26,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await signOut(auth);
   };
 
-  const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email.trim(), password);
-  };
-
-  const register = async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(auth, email.trim(), password);
-  };
-
   return (
     <AuthContext.Provider
       value={{
         user,
         loading,
         logout,
-        login,
-        register,
       }}
     >
       {children}

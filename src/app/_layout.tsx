@@ -1,5 +1,6 @@
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { Stack } from "expo-router";
+import { ActivityIndicator, View } from "react-native";
 
 export default function RootLayout() {
   return (
@@ -12,8 +13,18 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const { loading, user } = useAuth();
 
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+
       <Stack.Protected guard={!!user}>
         <Stack.Screen name="lobby" options={{ title: "Lobby" }} />
         <Stack.Screen name="create" options={{ title: "Create" }} />

@@ -15,7 +15,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CreateGameSchema } from "./validation/createSchema";
+import { CreateGameSchema } from "../validation/createSchema";
 
 type GameType = "tictactoe" | "rockpaperscissors" | "connectfour";
 

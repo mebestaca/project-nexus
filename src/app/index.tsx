@@ -1,9 +1,9 @@
+import SigninForm from "@/components/auth/SigninForm";
+import { signInUser } from "@/services/authService";
+import { signinSchema } from "@/validation/signinSchema";
 import { useRouter } from "expo-router";
 import { Formik } from "formik";
 import { View } from "react-native";
-import { signinSchema } from "@/app/validation/signinSchema";
-import SigninForm from "@/components/auth/SigninForm";
-import { signInUser } from "@/services/authService";
 
 const initialValues = {
   displayName: "",
