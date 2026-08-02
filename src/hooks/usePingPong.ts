@@ -7,7 +7,7 @@ import { paddleCollision, wallCollision } from "@/utils/collision";
 import { moveBall } from "@/utils/physics";
 import { useEffect, useRef, useState } from "react";
 
-const TABLE_WIDTH = 350;
+export const TABLE_WIDTH = 350;
 const TABLE_HEIGHT = 500;
 
 export function usePingPong(gameId: string, isHost: boolean) {
