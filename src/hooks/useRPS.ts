@@ -1,88 +1,86 @@
-import { useState } from "react";
-import { RPSChoice, RPSResult, RPSScore } from "@/types/rps";
+import { useAuth } from "@/context/AuthContext";
+import {
+  nextRound as nextRoundService,
+  submitChoice,
+  subscribeToGame,
+  updateRound,
+} from "@/services/rpsService";
+import { RPSChoice, RPSGame, RPSResult } from "@/types/rps";
 import { getWinner } from "@/utils/rpsWinner";
+import { useEffect, useState } from "react";
 
-export function useRPS() {
+export function useRPS(gameId: string) {
+  const { user } = useAuth();
+  const [game, setGame] = useState<RPSGame | null>(null);
 
-  const [playerChoice, setPlayerChoice] = useState<RPSChoice | null>(null);
-  const [opponentChoice, setOpponentChoice] = useState<RPSChoice | null>(null);
-  const [result, setResult] = useState<RPSResult>("");
-  const [waiting, setWaiting] = useState(false);
-  const [score, setScore] = useState<RPSScore>({
-      player1: 0,
-      player2: 0,
-    });
+  useEffect(() => {
+    if (!gameId) return;
+    const unsubscribe = subscribeToGame(gameId, (g) => setGame(g));
+    return unsubscribe;
+  }, [gameId]);
 
-  function selectChoice(choice: RPSChoice) {
+  const isPlayer1 = !!game && !!user && game.host === user.uid;
 
-    if (waiting) return;
+  useEffect(() => {
+    if (!game || !isPlayer1) return;
 
-    setPlayerChoice(choice);
+    const { player1Choice, player2Choice, winner } = game.currentRound;
 
-    setWaiting(true);
+    if (player1Choice && player2Choice && !winner) {
+      const result = getWinner(player1Choice, player2Choice);
+      const player1Score = game.score.player1 + (result === "player1" ? 1 : 0);
+      const player2Score = game.score.player2 + (result === "player2" ? 1 : 0);
+      updateRound(gameId, result, player1Score, player2Score);
+    }
+  }, [game, isPlayer1, gameId]);
 
+  const playerChoice = game
+    ? isPlayer1
+      ? game.currentRound.player1Choice
+      : game.currentRound.player2Choice
+    : null;
+
+  const opponentChoice = game
+    ? isPlayer1
+      ? game.currentRound.player2Choice
+      : game.currentRound.player1Choice
+    : null;
+
+  const rawResult = game?.currentRound.winner ?? "";
+  const result: RPSResult =
+    rawResult === "" || rawResult === "draw"
+      ? rawResult
+      : isPlayer1
+        ? rawResult
+        : rawResult === "player1"
+          ? "player2"
+          : "player1";
+
+  const score = game
+    ? isPlayer1
+      ? { player1: game.score.player1, player2: game.score.player2 }
+      : { player1: game.score.player2, player2: game.score.player1 }
+    : { player1: 0, player2: 0 };
+
+  const waiting = !!playerChoice && !opponentChoice;
+
+  async function selectChoice(choice: RPSChoice) {
+    if (!gameId || !game) return;
+    await submitChoice(gameId, isPlayer1 ? "player1" : "player2", choice);
   }
 
-
-  function opponentPlayed(choice: RPSChoice) {
-
-    setOpponentChoice(choice);
-
-    if (!playerChoice) return;
-
-    const winner =
-      getWinner(
-        playerChoice,
-        choice
-      );
-
-    setResult(winner);
-
-    setWaiting(false);
-
-    if (winner === "player1") {
-
-      setScore((old) => ({
-        ...old,
-        player1: old.player1 + 1,
-      }));
-
-    }
-
-    if (winner === "player2") {
-
-      setScore((old) => ({
-        ...old,
-        player2: old.player2 + 1,
-      }));
-
-    }
-
-  }
-
-  function nextRound() {
-
-    setPlayerChoice(null);
-
-    setOpponentChoice(null);
-
-    setResult("");
-
-    setWaiting(false);
-
+  async function handleNextRound() {
+    if (!gameId || !game) return;
+    await nextRoundService(gameId, game.round + 1);
   }
 
   return {
-
     playerChoice,
     opponentChoice,
+    score,
     result,
     waiting,
-    score,
     selectChoice,
-    opponentPlayed,
-    nextRound,
-
+    nextRound: handleNextRound,
   };
-
 }

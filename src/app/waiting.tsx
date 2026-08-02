@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase/config";
 import { createGame } from "@/services/gameService";
+import { createRPSGame } from "@/services/rpsService";
 import { GameType, Player, Room } from "@/types/room";
 import { router, useLocalSearchParams } from "expo-router";
 import { deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -51,12 +52,25 @@ export default function WaitingRoomScreen() {
       setRoom(data);
       setLoading(false);
 
+      const ROUTE_BY_GAME_TYPE: Record<GameType, string> = {
+        tictactoe: "/tictactoe",
+        rockpaperscissors: "/rps",
+        connectfour: "/connectfour",
+      };
+
       if (data.status === "started" && data.gameId) {
         router.replace({
-          pathname: "/tictactoe",
+          pathname: gameType === "tictactoe" ? "/tictactoe" : "/rps",
           params: { gameId: data.gameId },
         });
       }
+
+      // if (data.status === "started" && data.gameId) {
+      //   router.replace({
+      //     pathname: ROUTE_BY_GAME_TYPE[gameType],
+      //     params: { gameId: data.gameId },
+      //   });
+      // }
     });
 
     return unsubscribe;
@@ -98,6 +112,12 @@ export default function WaitingRoomScreen() {
 
     if (gameType === "tictactoe") {
       matchId = await createGame(hostPlayer.id, otherPlayer.id);
+    } else if (gameType === "rockpaperscissors") {
+      const docRef = await createRPSGame(room.name, hostPlayer.id);
+      matchId = docRef.id;
+    } else if (gameType === "connectfour") {
+      Alert.alert("Coming soon", "Connect Four isn't built yet.");
+      return;
     } else {
       return;
     }
