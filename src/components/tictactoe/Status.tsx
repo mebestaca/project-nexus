@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Player } from "@/types/game";
 
 interface Props {
-  turn: Player;
-  winner: Player | "" | "draw";
+  turn: string;
+  winner: string | "" | "draw";
   waiting?: boolean;
 }
 

@@ -50,7 +50,7 @@ export default function GameScreen() {
   async function play(index: number) {
     if (winner) return;
     if (board[index] !== "") return;
-    if (mySymbol !== turn) return; // not your turn
+    if (mySymbol !== turn) return;
 
     const newBoard = [...board];
     newBoard[index] = turn;
@@ -84,6 +84,13 @@ export default function GameScreen() {
     return playerO?.name ?? "Waiting...";
   }
 
+  const turnName = getPlayerName(turn);
+
+  const winnerName = 
+    winner && winner !== "draw"
+      ? getPlayerName(winner)
+      : winner;
+
   async function nextRound() {
     await updateGame(gameId!, {
       board: Array(9).fill(""),
@@ -116,8 +123,8 @@ export default function GameScreen() {
       />
 
       <Status 
-        turn={turn} 
-        winner={winner} 
+        turn={turnName} 
+        winner={winnerName} 
       />
 
       <Board 
