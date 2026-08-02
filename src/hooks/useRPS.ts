@@ -13,7 +13,7 @@ export function useRPS() {
       player2: 0,
     });
 
-  function choose(choice: RPSChoice) {
+  function selectChoice(choice: RPSChoice) {
 
     if (waiting) return;
 
@@ -79,7 +79,7 @@ export function useRPS() {
     result,
     waiting,
     score,
-    choose,
+    selectChoice,
     opponentPlayed,
     nextRound,
 
