@@ -1,17 +1,18 @@
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase/config";
+import { createGame } from "@/services/gameService";
 import { GameType, Player, Room } from "@/types/room";
 import { router, useLocalSearchParams } from "expo-router";
 import { deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -45,8 +46,17 @@ export default function WaitingRoomScreen() {
         }
         return;
       }
-      setRoom(snapshot.data() as Room);
+
+      const data = snapshot.data() as Room;
+      setRoom(data);
       setLoading(false);
+
+      if (data.status === "started" && data.gameId) {
+        router.replace({
+          pathname: "/tictactoe",
+          params: { gameId: data.gameId },
+        });
+      }
     });
 
     return unsubscribe;
@@ -70,9 +80,27 @@ export default function WaitingRoomScreen() {
   };
 
   const handleStartGame = async () => {
-    if (!lobbyId || !gameType || !gameId) return;
+    if (!room || !lobbyId || !gameType || !gameId) return;
+
     const gameRef = doc(db, "lobby", lobbyId, gameType, gameId);
-    await updateDoc(gameRef, { status: "started" });
+
+    if (gameType === "tictactoe") {
+      const hostPlayer = room.players.find((p) => p.name === room.host);
+      const otherPlayer = room.players.find((p) => p.name !== room.host);
+
+      if (!hostPlayer || !otherPlayer) {
+        Alert.alert(
+          "Not enough players",
+          "Tic Tac Toe needs two players to start.",
+        );
+        return;
+      }
+
+      const ticTacToeGameId = await createGame(hostPlayer.id, otherPlayer.id);
+      await updateDoc(gameRef, { status: "started", gameId: ticTacToeGameId });
+    } else {
+      await updateDoc(gameRef, { status: "started" });
+    }
   };
 
   const handleCancel = async () => {
