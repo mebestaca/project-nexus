@@ -16,8 +16,16 @@ export default function GameScreen() {
   const [board, setBoard] = useState<BoardType>(Array(9).fill(""));
   const [turn, setTurn] = useState<Player>("X");
   const [winner, setWinner] = useState<Player | "" | "draw">("");
-  const [playerX, setPlayerX] = useState<string>("");
-  const [playerO, setPlayerO] = useState<string>("");
+  const [playerX, setPlayerX] = useState({
+      uid: "",
+      name: "",
+  });
+
+  const [playerO, setPlayerO] = useState<{
+      uid: string;
+      name: string;
+  } | null>(null);
+
   const [score, setScore] = useState({playerX: 0, playerO: 0});
 
   useEffect(() => {
@@ -29,7 +37,7 @@ export default function GameScreen() {
       setTurn(game.turn);
       setWinner(game.winner);
       setPlayerX(game.playerX);
-      setPlayerO(game.playerO ?? "");
+      setPlayerO(game.playerO);
       setScore(game.score);
     });
 
@@ -37,7 +45,7 @@ export default function GameScreen() {
   }, [gameId]);
 
   const mySymbol: Player | null =
-    user?.uid === playerX ? "X" : user?.uid === playerO ? "O" : null;
+    user?.uid === playerX.uid ? "X" : user?.uid === playerO?.uid ? "O" : null;
 
   async function play(index: number) {
     if (winner) return;
@@ -65,6 +73,15 @@ export default function GameScreen() {
       winner: gameWinner ?? "",
       score: updatedScore
     });
+  }
+
+  function getPlayerName(symbol: Player) {
+
+    if(symbol === "X") {
+      return playerX.name;
+    }
+
+    return playerO?.name ?? "Waiting...";
   }
 
   async function nextRound() {
