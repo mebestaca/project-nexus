@@ -7,7 +7,7 @@ import { Board as BoardType, Game, Player } from "@/types/game";
 import { checkWinner } from "@/utils/winner";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 
 export default function GameScreen() {
@@ -115,6 +115,27 @@ export default function GameScreen() {
     router.replace("/lobby");
   }
 
+  function GameButton({
+    title,
+    onPress,
+  }: {
+    title: string;
+    onPress: () => void;
+  }) {
+    return (
+      <TouchableOpacity
+        style={styles.button}
+        onPress={onPress}
+      >
+
+        <Text style={styles.buttonText}>
+          {title}
+        </Text>
+
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Scoreboard
@@ -132,17 +153,17 @@ export default function GameScreen() {
         onMove={play} 
       />
 
-      <Button
+      <GameButton
         title="Next Round"
         onPress={nextRound}
       />
 
-      <Button
+      <GameButton
         title="Reset Match"
         onPress={resetMatch}
       />
 
-      <Button
+      <GameButton
         title="Back to Lobby"
         onPress={leaveGame}
       />
@@ -156,5 +177,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  button: {
+    width: 220,
+    paddingVertical: 14,
+    marginTop: 12,
+    backgroundColor: "#111827",
+    borderRadius: 12,
+    alignItems: "center",
+  },
+
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
   },
 });
