@@ -7,6 +7,7 @@ export type Board = Cell[];
 export interface Game {
     board: Board;
     turn: Player;
+    startingPlayer: Player;
     playerX: {
         uid: string;
         name: string;
