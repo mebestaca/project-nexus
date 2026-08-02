@@ -1,60 +1,64 @@
+import { GameCard } from "@/components/lobby/GameCard";
+import { styles } from "@/styles/lobby";
+import { Room } from "@/types/room";
 import { router } from "expo-router";
 import React from "react";
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-interface Game {
-  id: string;
-  name: string;
-  host: string;
-  players: number;
-  maxPlayers: number;
-}
-
-const MOCK_GAMES: Game[] = [
-  // {
-  //   id: "1",
-  //   name: "Friday Night Trivia",
-  //   host: "Alex",
-  //   players: 3,
-  //   maxPlayers: 8,
-  // },
-  // { id: "2", name: "Word Blitz", host: "Jamie", players: 5, maxPlayers: 6 },
-  // { id: "3", name: "Charades Chaos", host: "Sam", players: 2, maxPlayers: 10 },
+const MOCK_GAMES: Room[] = [
+  {
+    lobbyId: "lobby_001",
+    gameType: "tictactoe",
+    gameId: "game_001",
+    isHost: "false",
+    playerId: "player_001",
+    playerName: "Alex",
+    name: "Alex's Tic Tac Toe",
+    host: "Alex",
+    players: 1,
+    maxPlayers: 2,
+  },
+  {
+    lobbyId: "lobby_002",
+    gameType: "pong",
+    gameId: "game_002",
+    isHost: "false",
+    playerId: "player_002",
+    playerName: "Jamie",
+    name: "Jamie's Pong Match",
+    host: "Jamie",
+    players: 1,
+    maxPlayers: 2,
+  },
+  {
+    lobbyId: "lobby_003",
+    gameType: "spaceshooter",
+    gameId: "game_003",
+    isHost: "false",
+    playerId: "player_003",
+    playerName: "Sam",
+    name: "Sam's Space Battle",
+    host: "Sam",
+    players: 3,
+    maxPlayers: 4,
+  },
+  {
+    lobbyId: "lobby_004",
+    gameType: "tictactoe",
+    gameId: "game_004",
+    isHost: "false",
+    playerId: "player_004",
+    playerName: "Taylor",
+    name: "Taylor's Quick Match",
+    host: "Taylor",
+    players: 2,
+    maxPlayers: 2,
+  },
 ];
 
-interface GameCardProps {
-  game: Game;
-  onJoin: (gameId: string) => void;
-}
-
-function GameCard({ game, onJoin }: GameCardProps) {
-  return (
-    <View style={styles.card}>
-      <View style={styles.cardInfo}>
-        <Text style={styles.gameName}>{game.name}</Text>
-        <Text style={styles.gameMeta}>
-          Hosted by {game.host} · {game.players}/{game.maxPlayers} players
-        </Text>
-      </View>
-      <TouchableOpacity
-        style={styles.joinButton}
-        onPress={() => onJoin(game.id)}
-      >
-        <Text style={styles.joinButtonText}>Join</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
 export default function GameListScreen() {
-  const [games, setGames] = React.useState<Game[]>(MOCK_GAMES);
+  const [games, setGames] = React.useState<Room[]>(MOCK_GAMES);
 
   const handleJoin = (gameId: string) => {
     console.log("Joining game", gameId);
@@ -71,8 +75,8 @@ export default function GameListScreen() {
 
       <FlatList
         data={games}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <GameCard game={item} onJoin={handleJoin} />}
+        keyExtractor={(item) => item.lobbyId}
+        renderItem={({ item }) => <GameCard room={item} onJoin={handleJoin} />}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />
@@ -83,70 +87,3 @@ export default function GameListScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F5F5F7",
-    paddingHorizontal: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    marginTop: 12,
-    marginBottom: 16,
-  },
-  listContent: {
-    paddingBottom: 12,
-  },
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  cardInfo: {
-    flex: 1,
-    marginRight: 12,
-  },
-  gameName: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  gameMeta: {
-    fontSize: 13,
-    color: "#666",
-  },
-  joinButton: {
-    backgroundColor: "#4F46E5",
-    paddingVertical: 8,
-    paddingHorizontal: 18,
-    borderRadius: 8,
-  },
-  joinButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-    fontSize: 14,
-  },
-  hostButton: {
-    backgroundColor: "#111827",
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  hostButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-});
