@@ -4,7 +4,10 @@ import { RPSChoice, RPSGame, RPSResult } from "@/types/rps";
 
 export async function createRPSGame(
     gameName: string,
-    hostId: string
+    host: {
+        uid: string;
+        name: string;
+    }
 ) {
 
     return await addDoc(
@@ -12,7 +15,7 @@ export async function createRPSGame(
         {
             gameType: "rps",
             gameName,
-            host: hostId,
+            host,
             guest: null,
             status: "waiting",
             round: 1,
@@ -31,13 +34,16 @@ export async function createRPSGame(
 
 export async function joinRPSGame(
     gameId: string,
-    guestId: string,
+    guest: {
+        uid: string;
+        name: string;
+    },
 ) {
     const gameRef = 
         doc(db, "games", gameId);
 
     await updateDoc(gameRef, {
-        guest: guestId,
+        guest,
         status: "playing",
     });
 }
