@@ -1,16 +1,8 @@
 import { useEffect, useState } from "react";
 
-import {
-  Ball,
-  Paddle,
-  Score,
-} from "@/types/pingpong";
-
+import { Ball, Paddle, Score} from "@/types/pingpong";
 import { moveBall } from "@/utils/physics";
-import {
-  paddleCollision,
-  wallCollision,
-} from "@/utils/collision";
+import { paddleCollision, wallCollision} from "@/utils/collision";
 
 const TABLE_WIDTH = 350;
 const TABLE_HEIGHT = 500;
@@ -95,7 +87,7 @@ export function usePingPong() {
             newBall.y =
             player1Paddle.y - newBall.size;
          
-          newBall.velocityY =
+            newBall.velocityY =
             -Math.abs(newBall.velocityY);
 
           }
@@ -111,7 +103,7 @@ export function usePingPong() {
             player2Paddle.y +
             player2Paddle.height;
          
-          newBall.velocityY =
+            newBall.velocityY =
             Math.abs(newBall.velocityY);
 
           }

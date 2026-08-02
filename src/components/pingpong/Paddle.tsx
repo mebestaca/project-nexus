@@ -7,18 +7,11 @@ interface Props {
   height:number;
 }
 
-
-export default function Paddle({
-  x,
-  y,
-  width,
-  height,
-}:Props){
+export default function Paddle({ x, y, width, height}: Props) {
 
   return (
 
-    <View
-      style={[
+    <View style={[
         styles.paddle,
         {
           left:x,
@@ -28,10 +21,8 @@ export default function Paddle({
         }
       ]}
     />
-
   );
 }
-
 
 const styles = StyleSheet.create({
 

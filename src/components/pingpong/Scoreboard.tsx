@@ -5,11 +5,7 @@ interface Props {
     player2: number;
 }
 
-export default function Scoreboard({
-    player1,
-    player2,
-}: Props) {
-
+export default function Scoreboard({ player1, player2}: Props) {
     return (
         <View>
 

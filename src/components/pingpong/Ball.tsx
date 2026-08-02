@@ -13,17 +13,15 @@ export default function Ball({
 }: Props) {
 
     return (
-        <View
-            style={[
-                styles.ball,
-                {
-                    left:x,
-                    top:y,
-                    width:size,
-                    height:size,
-                    borderRadius:size/2,
-                }
-            ]}
+        <View style={[styles.ball,
+            {
+                left:x,
+                top:y,
+                width:size,
+                height:size,
+                borderRadius:size/2,
+            }
+        ]}
         />
     );
 }

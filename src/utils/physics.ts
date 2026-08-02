@@ -12,9 +12,7 @@ export function moveBall(ball: Ball): Ball {
 
 }
 
-export function bounceHorizontal(
-  ball: Ball
-): Ball {
+export function bounceHorizontal(ball: Ball): Ball {
 
   return {
     ...ball,
@@ -25,9 +23,7 @@ export function bounceHorizontal(
 
 }
 
-export function bounceVertical(
-  ball: Ball
-): Ball {
+export function bounceVertical(ball: Ball): Ball {
 
   return {
     ...ball,

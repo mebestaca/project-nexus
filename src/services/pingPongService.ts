@@ -1,16 +1,7 @@
-import {
-    addDoc,
-    collection,
-    doc,
-    updateDoc,
-    onSnapshot,
-  } from "firebase/firestore";
+import {addDoc, collection, doc, updateDoc, onSnapshot} from "firebase/firestore";
+import { db } from "@/firebase/config";
   
-  import { db } from "@/firebase/config";
-  
-  export async function createPingPongGame(
-    playerId:string
-  ){
+export async function createPingPongGame(playerId:string) {
     const game = await addDoc(
       collection(db,"pingpongGames"),
       {
@@ -27,10 +18,7 @@ import {
   
   }
   
-  export async function joinPingPongGame(
-    gameId:string,
-    playerId:string
-  ){
+export async function joinPingPongGame(gameId:string, playerId:string) {
   
     const gameRef =
       doc(
@@ -51,10 +39,7 @@ import {
   
   }
   
-  export function listenPingPongGame(
-    gameId:string,
-    callback:any
-  ){
+  export function listenPingPongGame(gameId:string, callback:any) {
   
     const gameRef =
       doc(
@@ -70,16 +55,13 @@ import {
         callback(
           snapshot.data()
         );
-  
+
       }
     );
   
   }
   
-  export async function savePingPongResult(
-    gameId:string,
-    data:any
-  ){
+  export async function savePingPongResult(gameId:string, data:any) {
   
     const gameRef =
       doc(

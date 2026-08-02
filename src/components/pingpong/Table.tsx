@@ -5,11 +5,8 @@ interface Props {
   [key: string]: any;
 }
 
-export default function Table({
-  children,
-  ...props
-}: Props) {
-
+export default function Table({ children, ...props}: Props) {
+    
   return (
     <View
       {...props}
