@@ -1,14 +1,19 @@
 import Board from "@/components/tictactoe/Board";
-import Status from "@/components/tictactoe/Status";
 import Scoreboard from "@/components/tictactoe/Scoreboard";
+import Status from "@/components/tictactoe/Status";
 import { useAuth } from "@/context/AuthContext";
 import { subscribeToGame, updateGame } from "@/services/gameService";
 import { Board as BoardType, Game, Player } from "@/types/game";
 import { checkWinner } from "@/utils/winner";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
-import { router } from "expo-router";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 
 export default function GameScreen() {
   const { gameId } = useLocalSearchParams<{ gameId: string }>();
@@ -17,16 +22,16 @@ export default function GameScreen() {
   const [turn, setTurn] = useState<Player>("X");
   const [winner, setWinner] = useState<Player | "" | "draw">("");
   const [playerX, setPlayerX] = useState({
-      uid: "",
-      name: "",
+    uid: "",
+    name: "",
   });
 
   const [playerO, setPlayerO] = useState<{
-      uid: string;
-      name: string;
+    uid: string;
+    name: string;
   } | null>(null);
 
-  const [score, setScore] = useState({playerX: 0, playerO: 0});
+  const [score, setScore] = useState({ playerX: 0, playerO: 0 });
 
   useEffect(() => {
     if (!gameId) return;
@@ -35,11 +40,8 @@ export default function GameScreen() {
       if (!game) return;
 
       if (game.status === "left") {
-        Alert.alert(
-          "Game ended",
-          "The other player left the match."
-        );
-        
+        Alert.alert("Game ended", "The other player left the match.");
+
         router.replace("/lobby");
         return;
       }
@@ -82,13 +84,12 @@ export default function GameScreen() {
       board: newBoard,
       turn: turn === "X" ? "O" : "X",
       winner: gameWinner ?? "",
-      score: updatedScore
+      score: updatedScore,
     });
   }
 
   function getPlayerName(symbol: Player) {
-
-    if(symbol === "X") {
+    if (symbol === "X") {
       return playerX.name;
     }
 
@@ -97,10 +98,8 @@ export default function GameScreen() {
 
   const turnName = getPlayerName(turn);
 
-  const winnerName = 
-    winner && winner !== "draw"
-      ? getPlayerName(winner)
-      : winner;
+  const winnerName =
+    winner && winner !== "draw" ? getPlayerName(winner) : winner;
 
   async function nextRound() {
     let nextStarter: Player;
@@ -127,14 +126,14 @@ export default function GameScreen() {
       winner: "",
       score: {
         playerX: 0,
-        playerO: 0
+        playerO: 0,
       },
     });
   }
 
   async function leaveGame() {
     await updateGame(gameId!, {
-        status: "left",
+      status: "left",
     });
   }
 
@@ -146,21 +145,14 @@ export default function GameScreen() {
     onPress: () => void;
   }) {
     return (
-      <TouchableOpacity
-        style={styles.button}
-        onPress={onPress}
-      >
-
-        <Text style={styles.buttonText}>
-          {title}
-        </Text>
-
+      <TouchableOpacity style={styles.button} onPress={onPress}>
+        <Text style={styles.buttonText}>{title}</Text>
       </TouchableOpacity>
     );
   }
 
   return (
-    <ScrollView 
+    <ScrollView
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
     >
@@ -171,58 +163,50 @@ export default function GameScreen() {
         playerOScore={score.playerO}
       />
 
-      <Status 
-        turn={turnName} 
-        winner={winnerName} 
-      />
+      <Status turn={turnName} winner={winnerName} />
 
-      <Board 
-        board={board} 
-        onMove={play} 
-      />
+      <Board board={board} onMove={play} />
 
-    {winner !== "" && (
-      <>
-      <GameButton
-        title="Next Round"
-        onPress={nextRound}
-      />
+      {winner !== "" && (
+        <>
+          <GameButton title="Next Round »" onPress={nextRound} />
 
-      <GameButton
-        title="Reset Match"
-        onPress={resetMatch}
-      />
+          <GameButton title="Reset Match ↺" onPress={resetMatch} />
 
-      <GameButton
-        title="Back to Lobby"
-        onPress={leaveGame}
-      />
-      </>
-    )}
-
+          <GameButton title="Back to Lobby ↩" onPress={leaveGame} />
+        </>
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    backgroundColor: "#ECE7E3",
+    flexDirection: "column",
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 30,
+    paddingVertical: 10,
   },
 
   button: {
     width: 220,
     paddingVertical: 14,
     marginTop: 12,
-    backgroundColor: "#111827",
+    backgroundColor: "#38137d",
     borderRadius: 12,
     alignItems: "center",
+    //shadow styling
+    shadowColor: "#5e3d9b",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 5,
   },
 
   buttonText: {
-    color: "#FFFFFF",
+    color: "#ECE7E3",
     fontSize: 16,
     fontWeight: "700",
   },
