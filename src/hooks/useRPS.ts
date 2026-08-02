@@ -63,6 +63,7 @@ export function useRPS(gameId: string) {
     : { player1: 0, player2: 0 };
 
   const waiting = !!playerChoice && !opponentChoice;
+  const revealOpponent = !!game?.currentRound.winner;
 
   async function selectChoice(choice: RPSChoice) {
     if (!gameId || !game) return;
@@ -77,6 +78,7 @@ export function useRPS(gameId: string) {
   return {
     playerChoice,
     opponentChoice,
+    revealOpponent,
     score,
     result,
     waiting,
