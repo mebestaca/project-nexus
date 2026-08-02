@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase/config";
 import { styles } from "@/types/create";
+import { GameType } from "@/types/lobby";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
 import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
@@ -16,8 +17,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CreateGameSchema } from "../validation/createSchema";
-
-type GameType = "tictactoe" | "rockpaperscissors" | "connectfour";
 
 interface CreateGameValues {
   gameName: string;
