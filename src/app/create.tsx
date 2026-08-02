@@ -32,8 +32,8 @@ const GAME_TYPES: { label: string; value: GameType }[] = [
 
 const MAX_PLAYERS_BY_TYPE: Record<GameType, number> = {
   tictactoe: 2,
-  pong: 2,
-  spaceshooter: 2,
+  rockpaperscissors: 2,
+  connectfour: 2,
 };
 
 const initialValues: CreateGameValues = {
