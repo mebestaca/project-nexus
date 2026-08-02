@@ -7,12 +7,21 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-export async function createGame(playerXId: string, playerOId: string) {
+export async function createGame(
+  playerX: {
+    uid: string;
+    name: string;
+  },
+  playerO: {
+    uid: string;
+    name: string;
+  } | null
+) {
   const game = await addDoc(collection(db, "games"), {
     board: ["", "", "", "", "", "", "", "", ""],
     turn: "X",
-    playerX: playerXId,
-    playerO: playerOId,
+    playerX,
+    playerO,
     winner: "",
     score: {
       playerX: 0,
