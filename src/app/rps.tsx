@@ -37,8 +37,6 @@ export default function RPSScreen() {
        />
 
       <ChoiceDisplay
-        playerName={myName}
-        opponentName={opponentName}
         playerChoice={playerChoice}
         opponentChoice={
             revealOpponent ? opponentChoice: null}
