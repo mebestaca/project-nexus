@@ -1,64 +1,54 @@
 import { GameCard } from "@/components/lobby/GameCard";
+import { db } from "@/firebase/config";
 import { styles } from "@/styles/lobby";
-import { Room } from "@/types/room";
+import { GameType, Room } from "@/types/room";
 import { router } from "expo-router";
-import React from "react";
+import { collectionGroup, onSnapshot } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const MOCK_GAMES: Room[] = [
-  {
-    lobbyId: "lobby_001",
-    gameType: "tictactoe",
-    gameId: "game_001",
-    isHost: "false",
-    playerId: "player_001",
-    playerName: "Alex",
-    name: "Alex's Tic Tac Toe",
-    host: "Alex",
-    players: 1,
-    maxPlayers: 2,
-  },
-  {
-    lobbyId: "lobby_002",
-    gameType: "pong",
-    gameId: "game_002",
-    isHost: "false",
-    playerId: "player_002",
-    playerName: "Jamie",
-    name: "Jamie's Pong Match",
-    host: "Jamie",
-    players: 1,
-    maxPlayers: 2,
-  },
-  {
-    lobbyId: "lobby_003",
-    gameType: "spaceshooter",
-    gameId: "game_003",
-    isHost: "false",
-    playerId: "player_003",
-    playerName: "Sam",
-    name: "Sam's Space Battle",
-    host: "Sam",
-    players: 3,
-    maxPlayers: 4,
-  },
-  {
-    lobbyId: "lobby_004",
-    gameType: "tictactoe",
-    gameId: "game_004",
-    isHost: "false",
-    playerId: "player_004",
-    playerName: "Taylor",
-    name: "Taylor's Quick Match",
-    host: "Taylor",
-    players: 2,
-    maxPlayers: 2,
-  },
-];
+const MOCK_GAMES: Room[] = [];
 
 export default function GameListScreen() {
   const [games, setGames] = React.useState<Room[]>(MOCK_GAMES);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const gameTypes: GameType[] = ["tictactoe", "pong", "spaceshooter"];
+    const unsubscribes = gameTypes.map((gameType) => {
+      const q = collectionGroup(db, gameType);
+      return onSnapshot(q, (snapshot) => {
+        setGames((prev) => {
+          const filtered = prev.filter((g) => g.gameType !== gameType);
+          const updated = snapshot.docs
+            .map((docSnap) => {
+              const data = docSnap.data();
+              const lobbyId = docSnap.ref.parent.parent?.id;
+              if (!lobbyId) return null;
+              return {
+                lobbyId,
+                gameId: docSnap.id,
+                gameType,
+                name: data.gameName,
+                host: data.players?.[0]?.name ?? "Unknown",
+                status: data.status,
+                players: data.players ?? [],
+                maxPlayers: data.maxPlayers ?? 2,
+                isHost: "false",
+                playerId: "",
+                playerName: "",
+              } as Room;
+            })
+            .filter((g): g is Room => g !== null && g.status === "waiting");
+          return [...filtered, ...updated];
+        });
+        setLoading(false);
+      });
+    });
+
+    return () => unsubscribes.forEach((unsub) => unsub());
+  }, []);
 
   const handleJoin = (gameId: string) => {
     console.log("Joining game", gameId);
