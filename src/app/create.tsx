@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import * as Yup from "yup";
+import { router } from "expo-router";
 
 type GameType = "tictactoe" | "arkanoid" | "spaceshooter";
 
@@ -50,7 +51,8 @@ export default function CreateGameScreen() {
     { setSubmitting }: FormikHelpers<CreateGameValues>,
   ) => {
     console.log("Hosting game:", values);
-
+    
+    router.push("/pingpong")
     setSubmitting(false);
   };
 
