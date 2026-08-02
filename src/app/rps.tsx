@@ -13,6 +13,7 @@ export default function RPSScreen() {
   const {
     playerChoice,
     opponentChoice,
+    revealOpponent,
     score,
     result,
     waiting,
@@ -26,7 +27,8 @@ export default function RPSScreen() {
 
       <ChoiceDisplay
         playerChoice={playerChoice}
-        opponentChoice={opponentChoice}
+        opponentChoice={
+            revealOpponent ? opponentChoice: null}
       />
 
       <ResultBanner result={result} />
