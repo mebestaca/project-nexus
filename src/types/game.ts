@@ -16,6 +16,7 @@ export interface Game {
         name: string;
     } | null;
     winner: Player | "" | "draw";
+    status: "playing" | "finished" | "left";
     score: {
         playerX: number;
         playerO: number,
