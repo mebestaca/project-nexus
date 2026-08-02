@@ -13,7 +13,8 @@ export function GameCard({ room, onJoin }: RoomCardProps) {
       <View style={styles.cardInfo}>
         <Text style={styles.gameName}>{room.name}</Text>
         <Text style={styles.gameMeta}>
-          Hosted by {room.host} · {room.players}/{room.maxPlayers} players
+          Hosted by {room.host} · {room.players.length}/{room.maxPlayers}{" "}
+          players
         </Text>
       </View>
       <TouchableOpacity
