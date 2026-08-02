@@ -2,7 +2,7 @@ import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase/config";
 import { createFourInARowGame } from "@/services/fourInARowService";
 import { createGame } from "@/services/gameService";
-import { createRPSGame } from "@/services/rpsService";
+import { createRPSGame, joinRPSGame } from "@/services/rpsService";
 import { styles } from "@/styles/waiting";
 import { GameType, Player, Room } from "@/types/room";
 import { router, useLocalSearchParams } from "expo-router";
@@ -111,10 +111,15 @@ export default function WaitingRoomScreen() {
       );
     } else if (gameType === "rockpaperscissors") {
       const docRef = await createRPSGame(room.name, {
-        name: room.name,
         uid: hostPlayer.id,
+        name: hostPlayer.name,
       });
       matchId = docRef.id;
+
+      await joinRPSGame(matchId, {
+        uid: otherPlayer.id,
+        name: otherPlayer.name,
+      });
     } else if (gameType === "connectfour") {
       const docRef = await createFourInARowGame(room.name, hostPlayer.id);
       matchId = docRef.id;
