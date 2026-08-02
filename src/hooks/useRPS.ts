@@ -40,11 +40,12 @@ export function useRPS(gameId: string) {
       : game.currentRound.player2Choice
     : null;
 
-  const opponentChoice = game
-    ? isPlayer1
-      ? game.currentRound.player2Choice
-      : game.currentRound.player1Choice
-    : null;
+  const opponentChoice = 
+    game?.currentRound.winner 
+        ?isPlayer1
+            ? game.currentRound.player2Choice
+            : game.currentRound.player1Choice
+        : null;
 
   const rawResult = game?.currentRound.winner ?? "";
   const result: RPSResult =
