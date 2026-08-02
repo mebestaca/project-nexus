@@ -1,5 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import {
+  leaveGame,
   nextRound as nextRoundService,
   submitChoice,
   subscribeToGame,
@@ -8,6 +9,7 @@ import {
 import { RPSChoice, RPSGame, RPSResult } from "@/types/rps";
 import { getWinner } from "@/utils/rpsWinner";
 import { useEffect, useState } from "react";
+import { router } from "expo-router";
 
 export function useRPS(gameId: string) {
   const { user } = useAuth();
@@ -15,9 +17,18 @@ export function useRPS(gameId: string) {
 
   useEffect(() => {
     if (!gameId) return;
-    const unsubscribe = subscribeToGame(gameId, (g) => setGame(g));
+
+    const unsubscribe = subscribeToGame(gameId, (g) => { 
+        if (g.status === "left") {
+            router.replace("/lobby");
+            return;
+        }
+
+        setGame(g);
+  });
+
     return unsubscribe;
-  }, [gameId]);
+}, [gameId]);
 
   const isPlayer1 = !!game && !!user && game.host === user.uid;
 
@@ -76,6 +87,12 @@ export function useRPS(gameId: string) {
     await nextRoundService(gameId, game.round + 1);
   }
 
+  async function handleLeaveGame() {
+    if (!gameId) return;
+
+    await leaveGame(gameId);
+  }
+
   return {
     playerChoice,
     opponentChoice,
@@ -85,5 +102,6 @@ export function useRPS(gameId: string) {
     waiting,
     selectChoice,
     nextRound: handleNextRound,
+    leaveGame: handleLeaveGame,
   };
 }

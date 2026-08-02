@@ -117,6 +117,14 @@ export async function finishGame(
     });
 }
 
+export async function leaveGame(gameId: string) {
+    const gameRef = doc(db, "games", gameId);
+
+    await updateDoc(gameRef, {
+        status: "left",
+    });
+}
+
 export function subscribeToGame(
     gameId: string,
     callback: (game: RPSGame) => void,

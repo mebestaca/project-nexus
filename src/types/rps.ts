@@ -28,7 +28,8 @@ export interface RPSGame {
     status:
         | "waiting"
         | "playing"
-        | "finished";
+        | "finished"
+        | "left";
     round: number;
     score: RPSScore;
     currentRound: RPSRound;

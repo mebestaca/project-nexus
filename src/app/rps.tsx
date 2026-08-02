@@ -19,6 +19,7 @@ export default function RPSScreen() {
     waiting,
     selectChoice,
     nextRound,
+    leaveGame
   } = useRPS(gameId!);
 
   return (
@@ -52,6 +53,12 @@ export default function RPSScreen() {
       />
 
       {result !== "" && <Button title="Next Round" onPress={nextRound} />}
+
+      <Button
+        title="Back to Lobby"
+        onPress={leaveGame}
+      />
+      
     </View>
   );
 }

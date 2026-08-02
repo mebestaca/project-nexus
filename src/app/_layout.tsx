@@ -28,7 +28,7 @@ function RootLayoutNav() {
       <Stack.Protected guard={!!user}>
         <Stack.Screen name="lobby" options={{ title: "Lobby" }} />
         <Stack.Screen name="create" options={{ title: "Create" }} />
-        <Stack.Screen name="rps" options={{ title: "RockPaperScissors" }} />
+        <Stack.Screen name="rps" options={{ title: "RockPaperScissors", headerShown: false }} />
         <Stack.Screen name="tictactoe" options={{ title: "TicTacToe", headerShown:false }} />
         <Stack.Screen name="waiting" options={{ title: "Waiting" }} />
         <Stack.Screen name="fourinarow" options={{ title: "ConnectFour" }} />
