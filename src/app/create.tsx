@@ -17,7 +17,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CreateGameSchema } from "./validation/createSchema";
 
-type GameType = "tictactoe" | "pong" | "spaceshooter";
+type GameType = "tictactoe" | "rockpaperscissors" | "connectfour";
 
 interface CreateGameValues {
   gameName: string;
@@ -26,8 +26,8 @@ interface CreateGameValues {
 
 const GAME_TYPES: { label: string; value: GameType }[] = [
   { label: "Tic Tac Toe", value: "tictactoe" },
-  { label: "Pong", value: "pong" },
-  { label: "Space Shooter", value: "spaceshooter" },
+  { label: "Rock Paper Scissors", value: "rockpaperscissors" },
+  { label: "Connect Four", value: "connectfour" },
 ];
 
 const MAX_PLAYERS_BY_TYPE: Record<GameType, number> = {
