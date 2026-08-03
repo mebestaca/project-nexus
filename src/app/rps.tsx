@@ -21,25 +21,24 @@ export default function RPSScreen() {
     opponentName,
     selectChoice,
     nextRound,
-    leaveGame
+    leaveGame,
   } = useRPS(gameId!);
 
   return (
     <ScrollView
-        contentContainerStyle={styles.container}
-        showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
     >
-      <Scoreboard 
-            player1Name={myName} 
-            player2Name={opponentName}
-            player1Score={score.player1}
-            player2Score={score.player2}
-       />
+      <Scoreboard
+        player1Name={myName}
+        player2Name={opponentName}
+        player1Score={score.player1}
+        player2Score={score.player2}
+      />
 
       <ChoiceDisplay
         playerChoice={playerChoice}
-        opponentChoice={
-            revealOpponent ? opponentChoice: null}
+        opponentChoice={revealOpponent ? opponentChoice : null}
       />
 
       <ResultBanner result={result} />
@@ -64,30 +63,25 @@ export default function RPSScreen() {
 
       {result !== "" && (
         <View style={styles.actionButtons}>
-            <Button 
-                title="Next Round" 
-                onPress={nextRound} 
-            />
-        
-        <View style={styles.buttonSpacing} />
+          <Button title="Next Round" onPress={nextRound} />
 
-        <Button
-            title="Back to Lobby"
-            onPress={leaveGame}
-        />
-    </View>
-    )}
+          <View style={styles.buttonSpacing} />
+
+          <Button title="Back to Lobby" onPress={leaveGame} />
+        </View>
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: "column",
     flexGrow: 1,
     justifyContent: "center",
     paddingHorizontal: 20,
     paddingVertical: 30,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#ECE7E3",
   },
 
   actionButtons: {
@@ -97,5 +91,4 @@ const styles = StyleSheet.create({
   buttonSpacing: {
     height: 12,
   },
-
 });
