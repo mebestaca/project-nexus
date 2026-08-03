@@ -130,7 +130,7 @@ export default function WaitingRoomScreen() {
       await updateDoc(docRef, {
         guest: {
           uid: otherPlayer.id,
-          name:otherPlayer.name,
+          name: otherPlayer.name,
         },
       });
     } else {
@@ -183,6 +183,7 @@ export default function WaitingRoomScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>{room.name}</Text>
+      <View style={styles.line}></View>
       <Text style={styles.subtitle}>Host: {room.host}</Text>
 
       <FlatList
@@ -221,7 +222,7 @@ export default function WaitingRoomScreen() {
         {isHost ? (
           <TouchableOpacity
             style={[
-              styles.actionButton,
+              styles.startButton,
               !allReady && styles.actionButtonDisabled,
             ]}
             onPress={handleStartGame}
