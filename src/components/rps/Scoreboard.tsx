@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "500",
     marginTop: 20,
-    color: "#111827",
+    color: "#ECE7E3",
     backgroundColor: "#38137d",
     borderRadius: 12,
     alignItems: "center",
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 0,
-    elevation: 5,
+    boxShadow: "4px 4px 0px 0px #5e3d9b",
   },
 
   name: {
@@ -56,7 +56,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 28,
     fontWeight: "700",
-    color: "#111827",
+    paddingVertical: 3,
+    paddingHorizontal: 12,
+    color: "#ECE7E3",
     maxWidth: 180,
     backgroundColor: "#38137d",
     borderRadius: 12,
@@ -66,6 +68,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 0,
-    elevation: 5,
+    boxShadow: "4px 4px 0px 0px #5e3d9b",
   },
 });
