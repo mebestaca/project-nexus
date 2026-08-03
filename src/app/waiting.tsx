@@ -7,7 +7,7 @@ import { styles } from "@/styles/waiting";
 import { GameType, Player, Room } from "@/types/room";
 import { router, useLocalSearchParams } from "expo-router";
 import { deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -17,6 +17,12 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+const ROUTE_BY_GAME_TYPE: Record<GameType, string> = {
+  tictactoe: "/tictactoe",
+  rockpaperscissors: "/rps",
+  connectfour: "/fourinarow",
+};
 
 export default function WaitingRoomScreen() {
   const { user } = useAuth();
@@ -32,11 +38,15 @@ export default function WaitingRoomScreen() {
 
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(true);
+  const [starting, setStarting] = useState(false);
+
+  const gameRef = useMemo(() => {
+    if (!lobbyId || !gameType || !gameId) return null;
+    return doc(db, "lobby", lobbyId, gameType, gameId);
+  }, [lobbyId, gameType, gameId]);
 
   useEffect(() => {
-    if (!lobbyId || !gameType || !gameId) return;
-
-    const gameRef = doc(db, "lobby", lobbyId, gameType, gameId);
+    if (!gameRef) return;
 
     const unsubscribe = onSnapshot(gameRef, (snapshot) => {
       if (!snapshot.exists()) {
@@ -53,12 +63,6 @@ export default function WaitingRoomScreen() {
       setRoom(data);
       setLoading(false);
 
-      const ROUTE_BY_GAME_TYPE: Record<GameType, string> = {
-        tictactoe: "/tictactoe",
-        rockpaperscissors: "/rps",
-        connectfour: "/fourinarow",
-      };
-
       if (data.status === "started" && data.gameId) {
         router.replace({
           pathname: ROUTE_BY_GAME_TYPE[gameType] as any,
@@ -68,19 +72,28 @@ export default function WaitingRoomScreen() {
     });
 
     return unsubscribe;
-  }, [lobbyId, gameType, gameId]);
+  }, [gameRef, gameType, isHost]);
 
   const currentPlayer = room?.players.find((p) => p.id === user?.uid);
 
-  const joiningPlayers = room?.players.filter((p) => p.isHost === false) ?? [];
+  const allReady = useMemo(() => {
+    if (!room) return false;
 
-  const allReady =
-    joiningPlayers.length > 0 && joiningPlayers.every((p) => p.ready);
+    let hasJoiningPlayer = false;
+
+    for (const p of room.players) {
+      if (p.isHost) continue;
+
+      hasJoiningPlayer = true;
+
+      if (!p.ready) return false;
+    }
+    return hasJoiningPlayer;
+  }, [room]);
 
   const handleToggleReady = async () => {
-    if (!room || !currentPlayer || !lobbyId || !gameType || !gameId) return;
+    if (!room || !currentPlayer || !gameRef) return;
 
-    const gameRef = doc(db, "lobby", lobbyId, gameType, gameId);
     const updatedPlayers = room.players.map((p) =>
       p.id === currentPlayer.id ? { ...p, ready: !p.ready } : p,
     );
@@ -89,9 +102,7 @@ export default function WaitingRoomScreen() {
   };
 
   const handleStartGame = async () => {
-    if (!room || !lobbyId || !gameType || !gameId) return;
-
-    const gameRef = doc(db, "lobby", lobbyId, gameType, gameId);
+    if (!room || !gameRef || starting) return;
     const hostPlayer = room.players.find((p) => p.isHost);
     const otherPlayer = room.players.find((p) => !p.isHost);
 
@@ -103,51 +114,59 @@ export default function WaitingRoomScreen() {
       return;
     }
 
-    let matchId: string;
+    setStarting(true);
 
-    if (gameType === "tictactoe") {
-      matchId = await createGame(
-        { uid: hostPlayer.id, name: hostPlayer.name },
-        { uid: otherPlayer.id, name: otherPlayer.name },
-      );
-    } else if (gameType === "rockpaperscissors") {
-      const docRef = await createRPSGame(room.name, {
-        uid: hostPlayer.id,
-        name: hostPlayer.name,
-      });
-      matchId = docRef.id;
+    try {
+      let matchId: string;
 
-      await joinRPSGame(matchId, {
-        uid: otherPlayer.id,
-        name: otherPlayer.name,
-      });
-    } else if (gameType === "connectfour") {
-      const docRef = await createFourInARowGame(room.name, {
-        uid: hostPlayer.id,
-        name: hostPlayer.name,
-      });
-      matchId = docRef.id;
+      if (gameType === "tictactoe") {
+        matchId = await createGame(
+          { uid: hostPlayer.id, name: hostPlayer.name },
+          { uid: otherPlayer.id, name: otherPlayer.name },
+        );
+      } else if (gameType === "rockpaperscissors") {
+        const docRef = await createRPSGame(room.name, {
+          uid: hostPlayer.id,
+          name: hostPlayer.name,
+        });
+        matchId = docRef.id;
 
-      await updateDoc(docRef, {
-        guest: {
+        await joinRPSGame(matchId, {
           uid: otherPlayer.id,
           name: otherPlayer.name,
-        },
-      });
-    } else {
-      return;
-    }
+        });
+      } else if (gameType === "connectfour") {
+        const docRef = await createFourInARowGame(room.name, {
+          uid: hostPlayer.id,
+          name: hostPlayer.name,
+        });
+        matchId = docRef.id;
 
-    await updateDoc(gameRef, { status: "started", gameId: matchId });
+        await updateDoc(docRef, {
+          guest: {
+            uid: otherPlayer.id,
+            name: otherPlayer.name,
+          },
+        });
+      } else {
+        setStarting(false);
+        return;
+      }
+
+      await updateDoc(gameRef, { status: "started", gameId: matchId });
+    } catch (error) {
+      console.error("Error starting game:", error);
+      Alert.alert("Error", "Could not start the game. Please try again.");
+      setStarting(false);
+    }
   };
 
   const handleCancel = async () => {
-    if (!room || !user || !lobbyId || !gameType || !gameId) {
+    if (!room || !user || !gameRef || !lobbyId) {
       router.back();
       return;
     }
 
-    const gameRef = doc(db, "lobby", lobbyId, gameType, gameId);
     const lobbyRef = doc(db, "lobby", lobbyId);
 
     try {
@@ -225,12 +244,14 @@ export default function WaitingRoomScreen() {
           <Pressable
             style={[
               styles.startButton,
-              !allReady && styles.actionButtonDisabled,
+              (!allReady || starting) && styles.actionButtonDisabled,
             ]}
             onPress={handleStartGame}
-            disabled={!allReady}
+            disabled={!allReady || starting}
           >
-            <Text style={styles.actionButtonText}>Start</Text>
+            <Text style={styles.actionButtonText}>
+              {starting ? "Starting…" : "Start"}
+            </Text>
           </Pressable>
         ) : (
           <Pressable
