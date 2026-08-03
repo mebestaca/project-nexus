@@ -16,4 +16,10 @@ export interface Player {
   isHost: boolean;
 }
 
+export const GAME_TYPE_LABELS: Record<GameType, string> = {
+  tictactoe: "Tic-Tac-Toe",
+  rockpaperscissors: "Rock Paper Scissors",
+  connectfour: "Connect Four",
+};
+
 export type GameType = "tictactoe" | "rockpaperscissors" | "connectfour";

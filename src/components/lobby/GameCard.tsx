@@ -1,17 +1,11 @@
 import { styles } from "@/styles/gamecard";
-import { GameType, Room } from "@/types/room";
+import { GAME_TYPE_LABELS, Room } from "@/types/room";
 import { Pressable, Text, View } from "react-native";
 
 interface RoomCardProps {
   room: Room;
   onJoin: (room: Room) => void;
 }
-
-const GAME_TYPE_LABELS: Record<GameType, string> = {
-  tictactoe: "Tic-Tac-Toe",
-  rockpaperscissors: "Rock Paper Scissors",
-  connectfour: "Connect Four",
-};
 
 export function GameCard({ room, onJoin }: RoomCardProps) {
   return (

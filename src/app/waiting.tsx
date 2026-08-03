@@ -4,7 +4,7 @@ import { createFourInARowGame } from "@/services/fourInARowService";
 import { createGame } from "@/services/gameService";
 import { createRPSGame, joinRPSGame } from "@/services/rpsService";
 import { styles } from "@/styles/waiting";
-import { GameType, Player, Room } from "@/types/room";
+import { GAME_TYPE_LABELS, GameType, Player, Room } from "@/types/room";
 import { router, useLocalSearchParams } from "expo-router";
 import { deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
@@ -205,6 +205,9 @@ export default function WaitingRoomScreen() {
       <Text style={styles.title}>{room.name}</Text>
       <View style={styles.line}></View>
       <Text style={styles.subtitle}>Host: {room.host}</Text>
+      <Text style={styles.subtitle}>
+        Game Type: {GAME_TYPE_LABELS[params.gameType]}
+      </Text>
 
       <FlatList
         data={room.players}
@@ -234,7 +237,6 @@ export default function WaitingRoomScreen() {
           );
         }}
       />
-
       <View style={styles.buttonRow}>
         <Pressable style={styles.cancelButton} onPress={handleCancel}>
           <Text style={styles.cancelButtonText}>Cancel</Text>
