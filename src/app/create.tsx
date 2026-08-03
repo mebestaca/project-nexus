@@ -75,7 +75,7 @@ export default function CreateGameScreen() {
         name: values.gameName.trim(),
         host: hostName,
         status: "waiting",
-        players: [{ id: hostId, name: hostName, ready: false }],
+        players: [{ id: hostId, name: hostName, ready: true, isHost: true }],
         maxPlayers: MAX_PLAYERS_BY_TYPE[gameType],
         createdAt: serverTimestamp(),
       });

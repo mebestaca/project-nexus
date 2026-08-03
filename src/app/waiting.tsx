@@ -71,8 +71,9 @@ export default function WaitingRoomScreen() {
   }, [lobbyId, gameType, gameId]);
 
   const currentPlayer = room?.players.find((p) => p.id === user?.uid);
-  const joiningPlayers =
-    room?.players.filter((p) => p.name !== room.host) ?? [];
+
+  const joiningPlayers = room?.players.filter((p) => p.isHost === false) ?? [];
+
   const allReady =
     joiningPlayers.length > 0 && joiningPlayers.every((p) => p.ready);
 
@@ -91,8 +92,8 @@ export default function WaitingRoomScreen() {
     if (!room || !lobbyId || !gameType || !gameId) return;
 
     const gameRef = doc(db, "lobby", lobbyId, gameType, gameId);
-    const hostPlayer = room.players.find((p) => p.name === room.host);
-    const otherPlayer = room.players.find((p) => p.name !== room.host);
+    const hostPlayer = room.players.find((p) => p.isHost);
+    const otherPlayer = room.players.find((p) => !p.isHost);
 
     if (!hostPlayer || !otherPlayer) {
       Alert.alert(
@@ -191,7 +192,8 @@ export default function WaitingRoomScreen() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }: { item: Player }) => {
-          const isPlayerHost = item.name === room.host;
+          const isPlayerHost = item.isHost;
+
           return (
             <View style={styles.playerRow}>
               <Text style={styles.playerName}>{item.name}</Text>

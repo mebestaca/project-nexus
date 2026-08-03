@@ -85,6 +85,7 @@ export default function GameListScreen() {
           id: user.uid,
           name: playerName,
           ready: false,
+          isHost: false,
         }),
       });
     } catch (error) {
