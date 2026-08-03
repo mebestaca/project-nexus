@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    flex: 1,
     fontSize: 34,
     fontWeight: "900",
     color: "#ECE7E3",
