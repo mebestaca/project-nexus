@@ -1,6 +1,6 @@
 import { styles } from "@/styles/gamecard";
 import { Room } from "@/types/room";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 interface RoomCardProps {
   room: Room;
@@ -17,9 +17,9 @@ export function GameCard({ room, onJoin }: RoomCardProps) {
           players
         </Text>
       </View>
-      <TouchableOpacity style={styles.joinButton} onPress={() => onJoin(room)}>
+      <Pressable style={styles.joinButton} onPress={() => onJoin(room)}>
         <Text style={styles.joinButtonText}>Join</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }

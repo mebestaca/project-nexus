@@ -12,8 +12,8 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  Pressable,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -217,12 +217,12 @@ export default function WaitingRoomScreen() {
       />
 
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+        <Pressable style={styles.cancelButton} onPress={handleCancel}>
           <Text style={styles.cancelButtonText}>Cancel</Text>
-        </TouchableOpacity>
+        </Pressable>
 
         {isHost ? (
-          <TouchableOpacity
+          <Pressable
             style={[
               styles.startButton,
               !allReady && styles.actionButtonDisabled,
@@ -231,9 +231,9 @@ export default function WaitingRoomScreen() {
             disabled={!allReady}
           >
             <Text style={styles.actionButtonText}>Start</Text>
-          </TouchableOpacity>
+          </Pressable>
         ) : (
-          <TouchableOpacity
+          <Pressable
             style={[
               styles.actionButton,
               currentPlayer?.ready && styles.actionButtonReady,
@@ -243,7 +243,7 @@ export default function WaitingRoomScreen() {
             <Text style={styles.actionButtonText}>
               {currentPlayer?.ready ? "Not Ready" : "Ready"}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         )}
       </View>
     </SafeAreaView>

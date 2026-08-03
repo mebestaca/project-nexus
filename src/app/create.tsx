@@ -10,9 +10,9 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -159,7 +159,7 @@ export default function CreateGameScreen() {
                 )}
               </View>
 
-              <TouchableOpacity
+              <Pressable
                 style={[
                   styles.hostButton,
                   isSubmitting && styles.hostButtonDisabled,
@@ -170,7 +170,7 @@ export default function CreateGameScreen() {
                 <Text style={styles.hostButtonText}>
                   {isSubmitting ? "Hosting..." : "Host"}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           )}
         </Formik>

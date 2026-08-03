@@ -12,7 +12,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const MOCK_GAMES: Room[] = [];
@@ -106,7 +106,6 @@ export default function GameListScreen() {
   };
 
   const handleHostGame = () => {
-    console.log("Host a game pressed");
     router.push("/create");
   };
 
@@ -123,9 +122,9 @@ export default function GameListScreen() {
         showsVerticalScrollIndicator={false}
       />
 
-      <TouchableOpacity style={styles.hostButton} onPress={handleHostGame}>
+      <Pressable style={styles.hostButton} onPress={handleHostGame}>
         <Text style={styles.hostButtonText}>Host a Game</Text>
-      </TouchableOpacity>
+      </Pressable>
     </SafeAreaView>
   );
 }

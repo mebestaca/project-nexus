@@ -13,7 +13,7 @@ export default function DisplayNameField() {
 
   return (
     <>
-      <Text style={styles.label}>Enter Your Display Name:</Text>
+      <Text style={styles.label}>Enter Your Name:</Text>
 
       <TextInput
         style={styles.input}
