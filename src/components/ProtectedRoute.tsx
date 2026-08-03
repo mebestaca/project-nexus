@@ -23,10 +23,10 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "f5f7fa",
+          backgroundColor: "#f5f7fa",
         }}
       >
-        <ActivityIndicator size="large" color="2563eb" />
+        <ActivityIndicator size="large" color="#2563eb" />
       </View>
     );
   }
