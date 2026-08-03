@@ -62,7 +62,7 @@ export default function RPSScreen() {
       />
 
       {result !== "" && (
-        <View style={styles.actionButtons}>
+        <View style={styles.hiddenContainer}>
           <Button title="Next Round" onPress={nextRound} />
 
           <View style={styles.buttonSpacing} />
@@ -84,8 +84,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#ECE7E3",
   },
 
-  actionButtons: {
+  hiddenContainer: {
     marginTop: 30,
+  },
+
+  button: {
+    textAlign: "center",
+    fontSize: 25,
+    fontWeight: "500",
+    marginTop: 20,
+    color: "#ECE7E3",
+    backgroundColor: "#38137d",
+    borderRadius: 12,
+    alignItems: "center",
+    //shadow styling
+    shadowColor: "#5e3d9b",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    boxShadow: "4px 4px 0px 0px #5e3d9b",
   },
 
   buttonSpacing: {

@@ -29,18 +29,41 @@ export const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: "600",
-    marginBottom: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginBottom: 20,
     marginTop: 15,
+    color: "#ECE7E3",
+    backgroundColor: "#8c4b28",
+    //border styling
+    borderRadius: 12,
+    borderWidth: 10,
+    borderColor: "#9B5E3D",
+    borderRightColor: "#7D3813",
+    borderBottomColor: "#7D3813",
+    //hard shadow styling
+    shadowColor: "#3F1C0A",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    boxShadow: "4px 4px 0px 0px #3F1C0A",
   },
 
   input: {
     height: 50,
+    minWidth: 200,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#5E3D9B",
     borderRadius: 8,
     paddingHorizontal: 15,
     fontSize: 16,
     backgroundColor: "#fafafa",
+    //hard shadow styling
+    shadowColor: "#000",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    boxShadow: "4px 4px 0px 0px #38137d",
   },
 
   error: {
@@ -50,13 +73,18 @@ export const styles = StyleSheet.create({
   },
 
   primaryButton: {
-    marginTop: 25,
-    height: 50,
-    borderRadius: 8,
-    backgroundColor: "#2563eb",
-
-    justifyContent: "center",
+    width: 220,
+    paddingVertical: 14,
+    marginTop: 12,
+    backgroundColor: "#38137d",
+    borderRadius: 12,
     alignItems: "center",
+    //shadow styling
+    shadowColor: "#5e3d9b",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    boxShadow: "4px 4px 0px 0px #5e3d9b",
   },
 
   primaryButtonDisabled: {
@@ -69,7 +97,6 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#2563eb",
-
     justifyContent: "center",
     alignItems: "center",
   },
@@ -110,5 +137,11 @@ export const styles = StyleSheet.create({
   footerText: {
     color: "#2563eb",
     fontSize: 14,
+  },
+  container: {
+    marginTop: 200,
+    alignItems: "center",
+    paddingHorizontal: 20,
+    width: "100%",
   },
 });

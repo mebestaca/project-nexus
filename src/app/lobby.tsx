@@ -12,7 +12,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, Text, TouchableOpacity } from "react-native";
+import { Alert, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const MOCK_GAMES: Room[] = [];
@@ -112,6 +112,7 @@ export default function GameListScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Available Games</Text>
+      <View style={styles.line}></View>
 
       <FlatList
         data={games}

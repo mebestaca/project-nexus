@@ -37,8 +37,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: "center",
     paddingVertical: 14,
-    gap: 5,
     paddingHorizontal: 20,
+    maxWidth: 390,
+    gap: 5,
     backgroundColor: "#8c4b28",
     //border styling
     borderRadius: 12,

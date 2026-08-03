@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     borderRightColor: "#7D3813",
     borderBottomColor: "#7D3813",
     //hard shadow styling
-    shadowColor: "#000",
+    shadowColor: "#3F1C0A",
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 0,
@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 40,
     fontWeight: "bold",
-    color: "38137D",
+    color: "#ECE7E3",
   },
 });
