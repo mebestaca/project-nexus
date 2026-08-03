@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/firebase/config";
 import { styles } from "@/types/create";
-import { GameType } from "@/types/lobby";
+import { GameType } from "@/types/room";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
 import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";

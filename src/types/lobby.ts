@@ -1,4 +1,4 @@
-export type GameType = "tictactoe" | "rockpaperscissors" | "connectfour";
+import { GameType } from "./room";
 
 export interface Lobby {
   id: string;
