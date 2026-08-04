@@ -81,12 +81,15 @@ src/
 └── validation/       # Formik/Yup schemas
 ```
 
+## Known Limitations
+
+- **No lobby persistence handling** — If a player closes or force-quits the app while in a lobby, their lobby is not currently cleaned up and will remain visible to other players as an abandoned entry.
+
 ## Roadmap
 
+- [ ] Lobby cleanup for disconnected/inactive players (heartbeat-based staleness detection + Firestore TTL)
 - [ ] Additional game types beyond Four in a Row
-- [ ] In-lobby chat
 - [ ] Player statistics and match history
-- [ ] Spectator mode
 
 ## Contributing
 
