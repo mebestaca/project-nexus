@@ -41,15 +41,26 @@ Project Nexus is a real-time multiplayer game lobby platform built with React Na
    npm install
    ```
 
-3. Configure environment variables (see below).
+3. Set up Firebase (see below).
 
-4. Start the development server:
+4. Configure environment variables (see below).
+
+5. Start the development server:
 
    ```bash
    npx expo start
    ```
 
-5. Scan the QR code with the Expo Go app on your device.
+6. Scan the QR code with the Expo Go app on your device.
+
+### Firebase Setup
+
+This project requires a Firebase project with the following enabled:
+
+1. **Authentication → Sign-in method → Anonymous** — must be enabled, or lobby creation will fail.
+2. **Firestore Database** — create a Firestore database (in test mode is fine for local development) to store lobby data.
+
+Once created, copy your Firebase project's config values into a `.env` file (see [Environment Variables](#environment-variables) below).
 
 ### Environment Variables
 
@@ -64,22 +75,7 @@ EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 EXPO_PUBLIC_FIREBASE_APP_ID=your_app_id
 ```
 
-> **Note:** Variables prefixed with `EXPO_PUBLIC_` are bundled into the client at build time. Do not place server-only secrets in this file.
-
-## Project Structure
-
-```
-src/
-├── app/            # Expo Router screens and navigation
-├── components/     # Reusable UI components
-├── context/         # React context providers (e.g., authentication state)
-├── firebase/        # Firebase configuration and initialization
-├── hooks/            # Custom React hooks
-├── services/         # Data access and business logic (e.g., auth, lobbies)
-├── styles/           # Shared styling
-├── types/            # TypeScript type definitions
-└── validation/       # Formik/Yup schemas
-```
+> **Note:** Variables prefixed with `EXPO_PUBLIC_` are bundled into the client at build time. Do not place server-only secrets in this file. **`.env` is not committed to this repository** — each contributor must create their own using the Firebase config values above.
 
 ## Known Limitations
 
@@ -90,6 +86,7 @@ src/
 - [ ] Lobby cleanup for disconnected/inactive players (heartbeat-based staleness detection + Firestore TTL)
 - [ ] Additional game types beyond Four in a Row
 - [ ] Player statistics and match history
+
 
 ## Contributing
 
