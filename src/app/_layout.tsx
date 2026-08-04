@@ -29,7 +29,10 @@ function RootLayoutNav() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
 
       <Stack.Protected guard={!!user}>
-        <Stack.Screen name="lobby" options={{ title: "Lobby" }} />
+        <Stack.Screen
+          name="lobby"
+          options={{ title: "Lobby", headerShown: false }}
+        />
         <Stack.Screen name="create" options={{ title: "Create" }} />
         <Stack.Screen
           name="rps"
@@ -39,7 +42,10 @@ function RootLayoutNav() {
           name="tictactoe"
           options={{ title: "TicTacToe", headerShown: false }}
         />
-        <Stack.Screen name="waiting" options={{ title: "Waiting" }} />
+        <Stack.Screen
+          name="waiting"
+          options={{ title: "Waiting", headerShown: false }}
+        />
         <Stack.Screen
           name="fourinarow"
           options={{ title: "ConnectFour", headerShown: false }}
